@@ -3,21 +3,207 @@
         "errno": 0,
         "data": {
             "list": [
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                7,
-                8,
-                9,
-                10
+                {
+                    "roleList": [
+                        {
+                            "id": 1,
+                            "name": "SuperAdmin"
+                        },
+                        {
+                            "id": 2,
+                            "name": "HR"
+                        },
+                        {
+                            "id": 3,
+                            "name": "NormalUser"
+                        },
+                        {
+                            "id": 4,
+                            "name": "BlackUser"
+                        }
+                    ],
+                    "member": {
+                        "username": "admin",
+                        "status": 1,
+                        "member_id": 1,
+                        "lock": 0,
+                        "created_at": "2022-01-01T00:00:00.000Z",
+                        "logined_at": "2022-01-01T00:00:00.000Z"
+                    },
+                    "memberData": {
+                        "id": 1,
+                        "name": "Member 1",
+                        "email": "member1@example.com",
+                        "avatar": "https://picsum.photos/200",
+                        "role": "admin",
+                        "deletedAt": null,
+                        "phone": "123456789",
+                        "nickname": "nickname",
+                        "username": "username",
+                        "gender": 0
+                    }
+                },
+                {
+                    "roleList": [
+                        {
+                            "id": 1,
+                            "name": "SuperAdmin"
+                        },
+                        {
+                            "id": 2,
+                            "name": "HR"
+                        },
+                        {
+                            "id": 3,
+                            "name": "NormalUser"
+                        },
+                        {
+                            "id": 4,
+                            "name": "BlackUser"
+                        }
+                    ],
+                    "member": {
+                        "username": "admin",
+                        "status": 0,
+                        "lock": 1,
+                        "created_at": "2022-01-01T00:00:00.000Z",
+                        "logined_at": "2022-01-01T00:00:00.000Z"
+                    },
+                    "memberData": {
+                        "id": 2,
+                        "name": "Member 2",
+                        "email": "member2@example.com",
+                        "avatar": "https://picsum.photos/200",
+                        "role": "admin",
+                        "deletedAt": null,
+                        "phone": "123456789",
+                        "nickname": "nickname",
+                        "username": "username",
+                        "gender": 1
+                    }
+                },
+                {
+                    "roleList": [
+                        {
+                            "id": 1,
+                            "name": "SuperAdmin"
+                        },
+                        {
+                            "id": 2,
+                            "name": "HR"
+                        },
+                        {
+                            "id": 3,
+                            "name": "NormalUser"
+                        },
+                        {
+                            "id": 4,
+                            "name": "BlackUser"
+                        }
+                    ],
+                    "member": {
+                        "username": "admin",
+                        "status": 0,
+                        "lock": 1,
+                        "created_at": "2022-01-01T00:00:00.000Z",
+                        "logined_at": "2022-01-01T00:00:00.000Z"
+                    },
+                    "memberData": {
+                        "id": 3,
+                        "name": "Member 3",
+                        "email": "member3@example.com",
+                        "avatar": "https://picsum.photos/200",
+                        "role": "admin",
+                        "deletedAt": null,
+                        "phone": "123456789",
+                        "nickname": "nickname",
+                        "username": "username",
+                        "gender": 2
+                    }
+                },
+                {
+                    "roleList": [
+                        {
+                            "id": 1,
+                            "name": "SuperAdmin"
+                        },
+                        {
+                            "id": 2,
+                            "name": "HR"
+                        },
+                        {
+                            "id": 3,
+                            "name": "NormalUser"
+                        },
+                        {
+                            "id": 4,
+                            "name": "BlackUser"
+                        }
+                    ],
+                    "member": {
+                        "username": "admin",
+                        "status": 0,
+                        "lock": 1,
+                        "created_at": "2022-01-01T00:00:00.000Z",
+                        "logined_at": "2022-01-01T00:00:00.000Z"
+                    },
+                    "memberData": {
+                        "id": 4,
+                        "name": "Member 4",
+                        "email": "member4@example.com",
+                        "avatar": "https://picsum.photos/200",
+                        "role": "admin",
+                        "deletedAt": null,
+                        "phone": "123456789",
+                        "nickname": "nickname",
+                        "username": "username",
+                        "gender": 1
+                    }
+                },
+                {
+                    "roleList": [
+                        {
+                            "id": 1,
+                            "name": "SuperAdmin"
+                        },
+                        {
+                            "id": 2,
+                            "name": "HR"
+                        },
+                        {
+                            "id": 3,
+                            "name": "NormalUser"
+                        },
+                        {
+                            "id": 4,
+                            "name": "BlackUser"
+                        }
+                    ],
+                    "member": {
+                        "username": "admin",
+                        "status": 1,
+                        "lock": 1,
+                        "created_at": "2022-01-01T00:00:00.000Z",
+                        "logined_at": "2022-01-01T00:00:00.000Z"
+                    },
+                    "memberData": {
+                        "id": 5,
+                        "name": "Member 5",
+                        "email": "member5@example.com",
+                        "avatar": "https://picsum.photos/200",
+                        "role": "admin",
+                        "deletedAt": null,
+                        "phone": "123456789",
+                        "nickname": "nickname",
+                        "username": "username",
+                        "gender": 0
+                    }
+                }
             ],
-            "total": "10",
-            "currentPage": "1",
-            "pageSize": "10",
-            "totalPage": "1"
+            "total": 5,
+            "currentPage": 1,
+            "pageSize": 10,
+            "totalPage": 1
         }
     },
     "login": {
@@ -30,7 +216,7 @@
     "profile": {
         "errno": 0,
         "data": {
-            "member": "abcd",
+            "member": "Nguyen Duy Hieu",
             "memberData": "eeede",
             "roleList": [
                 "role",
@@ -44,15 +230,18 @@
                 "role:list",
                 "member:list",
                 "pair:list",
-                "log:list"
+                "log:list",
+                "member:update",
+                "member:remove",
+                "article:add",
+                "article:remove"
             ]
         }
     },
     "validateAccessToken": {
         "errno": 0,
         "data": {
-            "accessToken": "abcd",
-            "refreshToken": "eeede"
+            "valid": true
         }
     }
 }

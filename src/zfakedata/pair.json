@@ -5,16 +5,46 @@
             {
                 "value": [
                     {
-                        "value": "a",
-                        "label": "a"
+                        "color": "danger",
+                        "label": "Lock",
+                        "value": 0
+                    },
+                    {
+                        "color": "success",
+                        "label": "Unlock",
+                        "value": 1
                     }
                 ]
             },
             {
-                "value": []
+                "value": [
+                    {
+                        "color": "danger",
+                        "label": "AbNormal",
+                        "value": 0
+                    },
+                    {
+                        "color": "success",
+                        "label": "Normal",
+                        "value": 1
+                    }
+                ]
             },
             {
-                "value": []
+                "value": [
+                    {
+                        "color": "primary",
+                        "label": "Male"
+                    },
+                    {
+                        "color": "danger",
+                        "label": "Female"
+                    },
+                    {
+                        "color": "info",
+                        "label": "None"
+                    }
+                ]
             }
         ]
     }
