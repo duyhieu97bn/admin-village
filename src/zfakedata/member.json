@@ -1,0 +1,58 @@
+{
+    "list": {
+        "errno": 0,
+        "data": {
+            "list": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+            ],
+            "total": "10",
+            "currentPage": "1",
+            "pageSize": "10",
+            "totalPage": "1"
+        }
+    },
+    "login": {
+        "errno": 0,
+        "data": {
+            "accessToken": "abcd",
+            "refreshToken": "eeede"
+        }
+    },
+    "profile": {
+        "errno": 0,
+        "data": {
+            "member": "abcd",
+            "memberData": "eeede",
+            "roleList": [
+                "role",
+                "role:list",
+                "member:list",
+                "pair:list",
+                "log:list"
+            ],
+            "permissionList": [
+                "role",
+                "role:list",
+                "member:list",
+                "pair:list",
+                "log:list"
+            ]
+        }
+    },
+    "validateAccessToken": {
+        "errno": 0,
+        "data": {
+            "accessToken": "abcd",
+            "refreshToken": "eeede"
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "getValue": {
+        "errno": 0,
+        "data": [
+            {
+                "value": [
+                    {
+                        "value": "a",
+                        "label": "a"
+                    }
+                ]
+            },
+            {
+                "value": []
+            },
+            {
+                "value": []
+            }
+        ]
+    }
+}
