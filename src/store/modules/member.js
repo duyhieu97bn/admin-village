@@ -2,10 +2,33 @@ import { register, login, logout, profile } from 'api/auth'
 
 const defaultState = () => {
   return {
+    username: null,
+    fullName: null,
+    phoneNumber: null,
+    address: null,
+    email: null,
+    role: null,
+    // 
     member: null,
     memberData: null,
-    roleList: [],
-    permissionList: []
+    roleList: [
+      "role",
+      "role:list",
+      "member:list",
+      "pair:list",
+      "log:list"
+    ],
+    permissionList: [
+      "role",
+      "role:list",
+      "member:list",
+      "pair:list",
+      "log:list",
+      "member:update",
+      "member:remove",
+      "article:add",
+      "article:remove"
+    ]
   }
 }
 
@@ -14,11 +37,18 @@ export default {
 
   mutations: {
     SET_MEMBER: (state, _member) => {
-      const { member, memberData, roleList, permissionList } = _member
-      state.member = member
-      state.memberData = memberData
-      state.roleList = roleList
-      state.permissionList = permissionList
+      // const { member, memberData, roleList, permissionList } = _member
+      // state.member = member
+      // state.memberData = memberData
+      // state.roleList = roleList
+      // state.permissionList = permissionList
+      const { username, fullName, phoneNumber, address, email, role } = _member
+      state.username = username
+      state.fullName = fullName
+      state.phoneNumber = phoneNumber
+      state.address = address
+      state.email = email
+      state.role = role
     },
     RESET_MEMBER: (state) => {
       Object.assign(state, defaultState())
@@ -31,6 +61,7 @@ export default {
         login(params)
           .then((response) => {
             commit('SET_TOKEN', response.data)
+            commit('SET_MEMBER', response.data.user)
             resolve(response.data)
           })
           .catch(error => {

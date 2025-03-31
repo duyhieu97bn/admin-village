@@ -205,43 +205,5 @@
             "pageSize": 10,
             "totalPage": 1
         }
-    },
-    "login": {
-        "message": "success",
-        "data": {
-            "accessToken": "abcd",
-            "refreshToken": "eeede"
-        }
-    },
-    "profile": {
-        "message": "success",
-        "data": {
-            "member": "Nguyen Duy Hieu",
-            "memberData": "eeede",
-            "roleList": [
-                "role",
-                "role:list",
-                "member:list",
-                "pair:list",
-                "log:list"
-            ],
-            "permissionList": [
-                "role",
-                "role:list",
-                "member:list",
-                "pair:list",
-                "log:list",
-                "member:update",
-                "member:remove",
-                "article:add",
-                "article:remove"
-            ]
-        }
-    },
-    "validateAccessToken": {
-        "message": "success",
-        "data": {
-            "valid": true
-        }
     }
 }
