@@ -1,4 +1,4 @@
-import { register, login, logout, profile } from 'api/member'
+import { register, login, logout, profile } from 'api/auth'
 
 const defaultState = () => {
   return {
@@ -26,7 +26,7 @@ export default {
   },
 
   actions: {
-    memberLogin({ commit }, params) {
+    authLogin({ commit }, params) {
       return new Promise((resolve, reject) => {
         login(params)
           .then((response) => {

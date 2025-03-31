@@ -195,7 +195,7 @@ import { useStore } from 'vuex'
 import { resetForm, allEmpty } from 'utils/form'
 import { list2Tree } from 'utils/tree'
 import Pair from 'utils/Pair'
-import { list as listMember, detail as getMemberDetail, updateDetail as updateMemberDetail, add as addMember, remove as removeMember, } from 'api/member'
+import { list as listMember, detail as getMemberDetail, updateDetail as updateMemberDetail, add as addMember, remove as removeMember, } from 'api/component'
 import { list as listRole, addMemberRole, removeMemberRole } from 'api/role'
 import { getName as getFakeName } from 'api/fake'
 

@@ -1,6 +1,6 @@
 {
     "getValue": {
-        "errno": 0,
+        "message": "success",
         "data": [
             {
                 "value": [
@@ -33,16 +33,19 @@
             {
                 "value": [
                     {
-                        "color": "primary",
-                        "label": "Male"
+                        "color": "success",
+                        "label": "Male",
+                        "value": 0
                     },
                     {
                         "color": "danger",
-                        "label": "Female"
+                        "label": "Female",
+                        "value": 1
                     },
                     {
                         "color": "info",
-                        "label": "None"
+                        "label": "None",
+                        "value": 2
                     }
                 ]
             }

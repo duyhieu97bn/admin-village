@@ -73,7 +73,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
     (response) => {
         loadingInstance && loadingInstance.close()
-        if (response.data.errno === 0) {
+        if (response.data.message === "success") {
             return Promise.resolve(response.data)
         } else {
             const authErrorCallback = async (error) => {
@@ -82,10 +82,10 @@ instance.interceptors.response.use(
                 router.push({ path: '/login' })
                 return Promise.reject(response.data)
             }
-            if (response.data.errno === 4001) {
+            if (response.data.message === 4001) {
                 console.error('Token error:', response.data.msg)
                 return authErrorCallback(response.msg)
-            } else if (response.data.errno === 4002) {
+            } else if (response.data.message === 4002) {
                 console.error('Access token error, msg:', response.data.msg)
                 console.error('Access token error, requests:', requests)
                 console.error('Access token error, isRefreshing:', isRefreshing)
@@ -129,11 +129,11 @@ instance.interceptors.response.use(
                         })
                     })
                 }
-            } else if (response.data.errno === 4003) {
+            } else if (response.data.message === 4003) {
                 console.error('Refresh access token error:', response.data.msg)
                 return authErrorCallback(response.msg)
             } else {
-                console.error('response errno !== 0', response.data.msg)
+                console.error('response message !== 0', response.data.msg)
                 return Promise.reject(response.data)
             }
         }

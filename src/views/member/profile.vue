@@ -160,7 +160,7 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { resetForm } from 'utils/form'
 import Pair from 'utils/Pair'
-import { updateProfile, validateOldPassword as validateMemberOldPassword, updatePassword, } from 'api/member'
+import { updateProfile, validateOldPassword as validateMemberOldPassword, updatePassword, } from 'api/auth'
 import { getName as getFakeName } from 'api/fake'
 
 const memberStatusMap = ref([])

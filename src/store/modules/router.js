@@ -1,5 +1,5 @@
 import { constRouters, asyncRouters } from '@/router'
-import { validateAccessToken } from 'api/member'
+import { validateAccessToken } from 'api/auth'
 import Permission from 'utils/Permission'
 
 const permission = new Permission()

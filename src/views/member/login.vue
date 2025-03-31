@@ -95,7 +95,7 @@ const onLogin = (formEl) => {
       return ElMessage.error('Login form error')
     }
     submitLoading.value = true
-    store.dispatch('memberLogin', form)
+    store.dispatch('authLogin', form)
       .then(() => {
         // get member profile
         store.dispatch('memberProfile')
