@@ -30,7 +30,6 @@ export default {
       return new Promise((resolve, reject) => {
         validateAccessToken()
           .then(() => {
-            console.log(asyncRouters);
             
             const accessedAsyncRouters = filterAsyncRouter(asyncRouters)
             commit('SET_ROUTERS', accessedAsyncRouters)
