@@ -28,12 +28,9 @@ export default {
   actions: {
     generateRoutes({ commit }) {
       return new Promise((resolve, reject) => {
-        validateAccessToken()
-          .then(() => {
-            
-            const accessedAsyncRouters = filterAsyncRouter(asyncRouters)
-            commit('SET_ROUTERS', accessedAsyncRouters)
-            resolve(accessedAsyncRouters)
+          const accessedAsyncRouters = filterAsyncRouter(asyncRouters)
+          commit('SET_ROUTERS', accessedAsyncRouters)
+          resolve(accessedAsyncRouters)
       })
     }
   }

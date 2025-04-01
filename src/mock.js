@@ -2,7 +2,9 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import pair from './zfakedata/pair.json'
+import member from './zfakedata/member.json'
 import component from './zfakedata/component.json'
+import villa from './zfakedata/villa.json'
 import auth from './zfakedata/auth.json'
 // Tạo một instance mock
 
@@ -17,8 +19,15 @@ if (process.env.NODE_ENV == 'development') {
     mock.onGet('/api/profile').reply(200, auth.profile);
     mock.onPost('/api/validateAccessToken').reply(200, auth.validateAccessToken);
     mock.onPost('/api/pair/getValue').reply(200, pair.getValue);
-    mock.onPost('/api/component/list').reply(200, component.list);
-    mock.onPost('/api/role/list').reply(200, component.list);
+    // room
+    mock.onPost('/api/component/listRoom').reply(200, component.listRoom);
+    mock.onPost('/api/component/listAmenity').reply(200, component.listAmenity);
+    // villa
+    mock.onPost('/api/villa/listVilla').reply(200, villa.listVilla);
+    mock.onPost('/api/villa/listAmenity').reply(200, villa.listAmenity);
+    //
+    mock.onPost('/api/member/list').reply(200, member.list);
+    mock.onPost('/api/role/list').reply(200, member.list);
 
     // Bạn có thể thêm nhiều mock khác ở đây
 

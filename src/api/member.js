@@ -1,6 +1,6 @@
 import request from 'utils/request'
 
-const group = '/component'
+const group = '/member'
 
 export function detail(data) {
   return request({
@@ -10,17 +10,9 @@ export function detail(data) {
   })
 }
 
-export function listRoom(data) {
+export function list(data) {
   return request({
-    url: `${group}/listRoom`,
-    method: 'POST',
-    data: data
-  })
-}
-
-export function listAmenity(data) {
-  return request({
-    url: `/${group}/listAmenity`,
+    url: `${group}/list`,
     method: 'POST',
     data: data
   })

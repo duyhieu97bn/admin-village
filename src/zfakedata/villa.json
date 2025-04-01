@@ -1,5 +1,5 @@
 {
-    "listRoom": {
+    "listVilla": {
         "message": "success",
         "data": {
             "list": [
@@ -7,201 +7,195 @@
                     "amenities": [
                         {
                             "id": 1,
-                            "name": "SuperAdmin"
+                            "name": "Air Conditioner"
                         },
                         {
                             "id": 2,
-                            "name": "HR"
+                            "name": "Tivi"
                         },
                         {
                             "id": 3,
-                            "name": "NormalUser"
+                            "name": "Wifi"
                         },
                         {
                             "id": 4,
                             "name": "BlackUser"
                         }
                     ],
-                    "room": {
-                        "title": "admin",
+                    "villa": {
+                        "name": "admin",
                         "status": 1,
-                        "room_id": 1,
-                        "maxPersons": 0,
+                        "maxRoom": 0,
                         "created_at": "2022-01-01T00:00:00.000Z",
                         "logined_at": "2022-01-01T00:00:00.000Z"
                     },
-                    "roomData": {
+                    "villaData": {
                         "pricePerNight": 1000,
                         "pricePerMonth": 1000,
                         "id": 1,
-                        "name": "Member 1",
                         "address": "member1@example.com",
                         "images": ["https://picsum.photos/200"],
                         "role": "admin",
                         "deletedAt": null,
                         "phone": "123456789",
                         "description": "description",
-                        "villaId": 0
+                        "provinceCode": 0
                     }
                 },
                 {
                     "amenities": [
                         {
                             "id": 1,
-                            "name": "SuperAdmin"
+                            "name": "Air Conditioner"
                         },
                         {
                             "id": 2,
-                            "name": "HR"
+                            "name": "Tivi"
                         },
                         {
                             "id": 3,
-                            "name": "NormalUser"
+                            "name": "Wifi"
                         },
                         {
                             "id": 4,
                             "name": "BlackUser"
                         }
                     ],
-                    "room": {
-                        "title": "admin2",
+                    "villa": {
+                        "name": "admin2",
                         "status": 0,
-                        "maxPersons": 1,
+                        "maxRoom": 1,
                         "created_at": "2022-01-01T00:00:00.000Z",
                         "logined_at": "2022-01-01T00:00:00.000Z"
                     },
-                    "roomData": {
+                    "villaData": {
                         "pricePerNight": 1000,
                         "pricePerMonth": 1000,
                         "id": 2,
-                        "name": "Member 2",
                         "address": "member2@example.com",
                         "images": ["https://picsum.photos/200"],
                         "role": "admin",
                         "deletedAt": null,
                         "phone": "123456789",
                         "description": "description2",
-                        "villaId": 1
+                        "provinceCode": 1
                     }
                 },
                 {
                     "amenities": [
                         {
                             "id": 1,
-                            "name": "SuperAdmin"
+                            "name": "Air Conditioner"
                         },
                         {
                             "id": 2,
-                            "name": "HR"
+                            "name": "Tivi"
                         },
                         {
                             "id": 3,
-                            "name": "NormalUser"
+                            "name": "Wifi"
                         },
                         {
                             "id": 4,
                             "name": "BlackUser"
                         }
                     ],
-                    "room": {
-                        "title": "admin3",
+                    "villa": {
+                        "name": "admin3",
                         "status": 0,
-                        "maxPersons": 1,
+                        "maxRoom": 1,
                         "created_at": "2022-01-01T00:00:00.000Z",
                         "logined_at": "2022-01-01T00:00:00.000Z"
                     },
-                    "roomData": {
+                    "villaData": {
                         "pricePerNight": 1000,
                         "pricePerMonth": 1000,
                         "id": 3,
-                        "name": "Member 3",
                         "address": "member3@example.com",
                         "images": ["https://picsum.photos/200"],
                         "role": "admin",
                         "deletedAt": null,
                         "phone": "123456789",
                         "description": "description3",
-                        "villaId": 2
+                        "provinceCode": 2
                     }
                 },
                 {
                     "amenities": [
                         {
                             "id": 1,
-                            "name": "SuperAdmin"
+                            "name": "Air Conditioner"
                         },
                         {
                             "id": 2,
-                            "name": "HR"
+                            "name": "Tivi"
                         },
                         {
                             "id": 3,
-                            "name": "NormalUser"
+                            "name": "Wifi"
                         },
                         {
                             "id": 4,
                             "name": "BlackUser"
                         }
                     ],
-                    "room": {
-                        "title": "admin4",
+                    "villa": {
+                        "name": "admin4",
                         "status": 0,
-                        "maxPersons": 1,
+                        "maxRoom": 1,
                         "created_at": "2022-01-01T00:00:00.000Z",
                         "logined_at": "2022-01-01T00:00:00.000Z"
                     },
-                    "roomData": {
+                    "villaData": {
                         "pricePerNight": 1000,
                         "pricePerMonth": 1000,
                         "id": 4,
-                        "name": "Member 4",
                         "address": "member4@example.com",
                         "images": ["https://picsum.photos/200"],
                         "role": "admin",
                         "deletedAt": null,
                         "phone": "123456789",
                         "description": "description4",
-                        "villaId": 1
+                        "provinceCode": 1
                     }
                 },
                 {
                     "amenities": [
                         {
                             "id": 1,
-                            "name": "SuperAdmin"
+                            "name": "Air Conditioner"
                         },
                         {
                             "id": 2,
-                            "name": "HR"
+                            "name": "Tivi"
                         },
                         {
                             "id": 3,
-                            "name": "NormalUser"
+                            "name": "Wifi"
                         },
                         {
                             "id": 4,
                             "name": "BlackUser"
                         }
                     ],
-                    "room": {
-                        "title": "admin5",
+                    "villa": {
+                        "name": "admin5",
                         "status": 1,
-                        "maxPersons": 1,
+                        "maxRoom": 1,
                         "created_at": "2022-01-01T00:00:00.000Z",
                         "logined_at": "2022-01-01T00:00:00.000Z"
                     },
-                    "roomData": {
+                    "villaData": {
                         "pricePerNight": 1000,
                         "pricePerMonth": 1000,
                         "id": 5,
-                        "name": "Member 5",
                         "address": "member5@example.com",
                         "images": ["https://picsum.photos/200"],
                         "role": "admin",
                         "deletedAt": null,
                         "phone": "123456789",
                         "description": "description5",
-                        "villaId": 0
+                        "provinceCode": 0
                     }
                 }
             ],

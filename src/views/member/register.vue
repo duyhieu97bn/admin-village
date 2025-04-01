@@ -34,7 +34,7 @@ import { ref, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { resetForm } from 'utils/form'
-import { isMemberExist } from 'api/component'
+import { isMemberExist } from 'api/member'
 import background from 'assets/image/maldives.jpg'
 
 const siteName = import.meta.env.VITE_SITE_NAME

@@ -38,6 +38,40 @@ export const constRouters = [
         props: route => ({ redirect: route.query.redirect })
     },
     {
+        path: '/room',
+        component: Layout,
+        name: 'Room',
+        meta: { icon: 'user', dropDown: true, },
+        children: [{
+            path: 'profile',
+            name: 'Room Profile',
+            component: _import('room/profile'),
+            meta: { auth: true }
+        }, {
+            path: 'list',
+            name: 'Room Manage',
+            component: _import('room/list'),
+            meta: { icon: 'user', auth: true}
+        },]
+    },
+    {
+        path: '/villa',
+        component: Layout,
+        name: 'Villa',
+        meta: { icon: 'user', dropDown: true, },
+        children: [{
+            path: 'profile',
+            name: 'Villa Profile',
+            component: _import('villa/profile'),
+            meta: { auth: true }
+        }, {
+            path: 'list',
+            name: 'Villa Manage',
+            component: _import('villa/list'),
+            meta: { icon: 'user', auth: true}
+        },]
+    },
+    {
         path: '/nestedMenu',
         component: Layout,
         name: 'Nested Menu',

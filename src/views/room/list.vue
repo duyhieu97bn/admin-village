@@ -1,29 +1,29 @@
 <template>
   <div class="app-container">
     <!-- filter container -->
-    <div class="filter-container" v-permission="'member:list'">
+    <!-- <div class="filter-container" v-permission="'room:list'">
       <el-form :inline="true" ref="searchFormRef" :model="searchForm">
         <el-form-item>
-          <el-button type="success" icon="refresh" circle @click="getMemberList"></el-button>
-          <el-button type="primary" icon="plus" circle v-permission="'member:add'" @click="showAddMemberDialog">
+          <el-button type="success" icon="refresh" circle @click="getRoomList"></el-button>
+          <el-button type="primary" icon="plus" circle v-permission="'room:add'" @click="showAddMemberDialog">
           </el-button>
         </el-form-item>
-        <el-form-item label="Username" prop="member.username">
-          <el-input v-model="searchForm.member.username" />
+        <el-form-item label="Username" prop="room.title">
+          <el-input v-model="searchForm.room.title" />
         </el-form-item>
-        <el-form-item label="Status" prop="member.status">
-          <el-select v-model="searchForm.member.status" clearable>
-            <el-option v-for="item in memberStatusMap" :key="item.value" :label="item.label" :value="item.value"
-              :disabled="item.value === searchForm.member.status" />
+        <el-form-item label="Status" prop="room.status">
+          <el-select v-model="searchForm.room.status" clearable>
+            <el-option v-for="item in roomStatusMap" :key="item.value" :label="item.label" :value="item.value"
+              :disabled="item.value === searchForm.room.status" />
           </el-select>
         </el-form-item>
-        <el-form-item label="Nickname" prop="memberData.nickname">
-          <el-input v-model="searchForm.memberData.nickname" />
+        <el-form-item label="Nickname" prop="roomData.description">
+          <el-input v-model="searchForm.roomData.description" />
         </el-form-item>
-        <el-form-item label="Gender" prop="memberData.gender">
-          <el-select v-model="searchForm.memberData.gender" clearable>
-            <el-option v-for="item in memberGenderMap" :key="item.value" :label="item.label" :value="item.value"
-              :disabled="item.value === searchForm.memberData.gender" />
+        <el-form-item label="Gender" prop="roomData.villaId">
+          <el-select v-model="searchForm.roomData.villaId" clearable>
+            <el-option v-for="item in roomGenderMap" :key="item.value" :label="item.label" :value="item.value"
+              :disabled="item.value === searchForm.roomData.villaId" />
           </el-select>
         </el-form-item>
         <el-form-item label="RoleName" prop="role.name">
@@ -39,68 +39,70 @@
           " @click="restSearch(searchFormRef)"></el-button>
         </el-form-item>
       </el-form>
-    </div>
+    </div> -->
     <!-- Header table -->
-    <el-table v-loading="memberListLoading" :data="memberList" border highlight-current-row style="width: 100%">
+    <el-table v-loading="roomListLoading" :data="roomList" border highlight-current-row style="width: 100%">
       <el-table-column type="index" :index="getIndex" />
-      <el-table-column label="Avatar" prop="memberData.avatar" width="85">
+      <el-table-column label="Image" prop="roomData.images" width="85">
         <template #default="scope">
-          <el-avatar :size="50" :src="scope.row.memberData.avatar"></el-avatar>
+          <el-avatar :size="50" :src="scope.row.roomData.images[0]"></el-avatar>
         </template>
       </el-table-column>
-      <el-table-column label="Username" prop="member.username" width="150" />
-      <el-table-column label="Nickname" prop="memberData.nickname" width="150" />
-      <el-table-column label="Gender" prop="memberData.gender" width="100">
-        <template #default="scope">
-          <el-tag size="small" v-if="memberGenderMap.length > 0"
-            :type="memberGenderMap[scope.row.memberData.gender].color">
-            {{ memberGenderMap[scope.row.memberData.gender].label }}
+      <el-table-column label="Title" prop="room.title" width="150" />
+      <el-table-column label="Description" prop="roomData.description" width="150" />
+      <el-table-column label="Villa ID" prop="roomData.villaId" width="100">
+        <!-- <template #default="scope">
+          <el-tag size="small" v-if="roomGenderMap.length > 0"
+            :type="roomGenderMap[scope.row.roomData.villaId].color">
+            {{ roomGenderMap[scope.row.roomData.villaId].label }}
           </el-tag>
-        </template>
+        </template> -->
       </el-table-column>
-      <el-table-column label="Status" prop="member.status" width="100">
-        <template #default="scope">
-          <el-tag size="small" v-if="memberStatusMap.length > 0" :type="memberStatusMap[scope.row.member.status].color">
-            {{ memberStatusMap[scope.row.member.status].label }}
+      <el-table-column label="Status" prop="room.status" width="100">
+        <!-- <template #default="scope">
+          <el-tag size="small" v-if="roomStatusMap.length > 0" :type="roomStatusMap[scope.row.room.status].color">
+            {{ roomStatusMap[scope.row.room.status].label }}
           </el-tag>
-        </template>
+        </template> -->
       </el-table-column>
-      <el-table-column label="Lock" prop="member.lock" width="100">
-        <template #default="scope">
-          <el-tag size="small" v-if="memberLockMap.length > 0" :type="memberLockMap[scope.row.member.lock].color">
-            {{ memberLockMap[scope.row.member.lock].label }}
+      <el-table-column label="Max Persons" prop="room.maxPersons" width="100">
+        <!-- <template #default="scope">
+          <el-tag size="small" v-if="roomLockMap.length > 0" :type="roomLockMap[scope.row.room.maxPersons].color">
+            {{ roomLockMap[scope.row.room.maxPersons].label }}
           </el-tag>
-        </template>
+        </template> -->
       </el-table-column>
-      <el-table-column label="RoleName" width="130">
+      <el-table-column label="Amenities" width="130">
         <template #default="scope">
-          <template v-for="role in scope.row.roleList" :key="role.id">
+          <template v-for="amenity in scope.row.amenities" :key="amenity.id">
             <el-tag size="small" effect="plain" class="mr-1">
-              {{ role.name }}
+              {{ amenity.name }}
             </el-tag>
           </template>
         </template>
       </el-table-column>
+      <el-table-column label="Price Per Night" prop="roomData.pricePerNight" width="150" />
+      <el-table-column label="Price Per Month" prop="roomData.pricePerMonth" width="150" />
       <el-table-column label="LoginAt / RegisterAt" width="180">
         <template #default="scope">
-          <div>{{ scope.row.member.logined_at || 'None' }}</div>
-          <div>{{ scope.row.member.created_at }}</div>
+          <div>{{ scope.row.room.logined_at || 'None' }}</div>
+          <div>{{ scope.row.room.created_at }}</div>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="Operations" v-permission:or="['member:update', 'member:remove']">
+      <el-table-column fixed="right" label="Operations" v-permission:or="['room:update', 'room:remove']">
         <template #default="scope">
-          <template v-if="scope.row.member.member_id !== member.id">
+          <template v-if="scope.row.room.room_id !== room.id">
             <el-space wrap>
-              <span v-permission="'member:update'">
+              <span v-permission="'room:update'">
                 <el-button @click="
-                  showUpdateMemberRoleDialog(scope.row.member.member_id)
+                  showUpdateMemberRoleDialog(scope.row.room.room_id)
                 ">Update Role</el-button>
-                <el-button @click="showUpdateMemberDialog(scope.row.member.member_id)">Update Member</el-button>
+                <el-button @click="showUpdateMemberDialog(scope.row.room.room_id)">Update Member</el-button>
               </span>
-              <span v-permission="'member:remove'" v-if="scope.row.member.lock === 0">
+              <span v-permission="'room:remove'" v-if="scope.row.room.maxPersons === 0">
                 <el-popconfirm confirm-button-text="Yes" cancel-button-text="No" icon-color="red"
-                  :title="`Are you sure to remove this member: ${scope.row.member.username}?`"
-                  @confirm="onRemove(scope.row.member.member_id)">
+                  :title="`Are you sure to remove this room: ${scope.row.room.title}?`"
+                  @confirm="onRemove(scope.row.room.room_id)">
                   <template #reference>
                     <el-button>Remove</el-button>
                   </template>
@@ -117,56 +119,56 @@
       @size-change="handleSizeChange" @current-change="handleCurrentChange">
     </el-pagination>
     <el-dialog v-model="dialogMemberVisible" :title="dialogMemberStatusMap[dialogMemberStatus].title" destroy-on-close>
-      <el-form ref="memberFormRef" :model="memberForm" :rules="memberFormRules" status-icon label-position="left"
+      <el-form ref="roomFormRef" :model="roomForm" :rules="roomFormRules" status-icon label-position="left"
         label-width="100px">
-        <el-form-item label="Username" prop="member.username">
-          <el-input type="text" autocomplete="off" prefix-icon="user" v-model="memberForm.member.username" />
+        <el-form-item label="Username" prop="room.title">
+          <el-input type="text" autocomplete="off" prefix-icon="user" v-model="roomForm.room.title" />
         </el-form-item>
-        <el-form-item label="Password" prop="member.password">
-          <el-input type="text" autocomplete="off" prefix-icon="lock" v-model="memberForm.member.password" />
+        <el-form-item label="Password" prop="room.password">
+          <el-input type="text" autocomplete="off" prefix-icon="maxPersons" v-model="roomForm.room.password" />
         </el-form-item>
-        <el-form-item label="Status" prop="member.status">
-          <el-select v-model="memberForm.member.status">
-            <el-option v-for="item in memberStatusMap" :key="item.value" :label="item.label" :value="item.value"
-              :disabled="item.value === memberForm.member.status" />
+        <el-form-item label="Status" prop="room.status">
+          <el-select v-model="roomForm.room.status">
+            <el-option v-for="item in roomStatusMap" :key="item.value" :label="item.label" :value="item.value"
+              :disabled="item.value === roomForm.room.status" />
           </el-select>
         </el-form-item>
-        <el-form-item label="Lock" prop="member.lock">
-          <el-select v-model="memberForm.member.lock">
-            <el-option v-for="item in memberLockMap" :key="item.value" :label="item.label" :value="item.value"
-              :disabled="item.value === memberForm.member.lock" />
+        <el-form-item label="Lock" prop="room.maxPersons">
+          <el-select v-model="roomForm.room.maxPersons">
+            <el-option v-for="item in roomLockMap" :key="item.value" :label="item.label" :value="item.value"
+              :disabled="item.value === roomForm.room.maxPersons" />
           </el-select>
         </el-form-item>
-        <el-form-item label="Nickname" prop="memberData.nickname">
-          <el-input type="text" autocomplete="off" prefix-icon="user" v-model="memberForm.memberData.nickname">
+        <el-form-item label="Nickname" prop="roomData.description">
+          <el-input type="text" autocomplete="off" prefix-icon="user" v-model="roomForm.roomData.description">
             <template #append>
               <el-button icon="refresh-right" @click="getFakeNickname" :loading="getFakeNicknameLoading"
                 :disabled="getFakeNicknameDisabled" />
             </template>
           </el-input>
         </el-form-item>
-        <el-form-item label="Gender" prop="memberData.gender">
-          <el-select v-model="memberForm.memberData.gender">
-            <el-option v-for="item in memberGenderMap" :key="item.value" :label="item.label" :value="item.value"
-              :disabled="item.value === memberForm.memberData.gender" />
+        <el-form-item label="Gender" prop="roomData.villaId">
+          <el-select v-model="roomForm.roomData.villaId">
+            <el-option v-for="item in roomGenderMap" :key="item.value" :label="item.label" :value="item.value"
+              :disabled="item.value === roomForm.roomData.villaId" />
           </el-select>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogMemberVisible = false">Cancel</el-button>
-          <el-button type="danger" @click="resetForm(memberFormRef)">Reset</el-button>
+          <el-button type="danger" @click="resetForm(roomFormRef)">Reset</el-button>
           <el-button type="primary" :loading="submitMemberLoading" :disabled="submitMemberDisabled"
-            @click="dialogMemberStatusMap[dialogMemberStatus].submitAction(memberFormRef)">Confirm
+            @click="dialogMemberStatusMap[dialogMemberStatus].submitAction(roomFormRef)">Confirm
           </el-button>
         </span>
       </template>
     </el-dialog>
 
     <el-dialog v-model="dialogUpdateMemberRoleVisible" title="Update Member Role" destroy-on-close>
-      <el-form ref="memberRoleFormRef" :model="memberRoleForm" label-position="left" label-width="110px">
+      <el-form ref="roomRoleFormRef" :model="roomRoleForm" label-position="left" label-width="110px">
         <el-form-item label="Current Role">
-          <template v-for="(role, index) in memberRoleForm.roleList" :key="role.id">
+          <template v-for="(role, index) in roomRoleForm.amenities" :key="role.id">
             <el-tag size="small" effect="plain" class="mr-1" closable @close="onRemoveMemberRole(index)">{{ role.name }}
             </el-tag>
           </template>
@@ -195,28 +197,28 @@ import { useStore } from 'vuex'
 import { resetForm, allEmpty } from 'utils/form'
 import { list2Tree } from 'utils/tree'
 import Pair from 'utils/Pair'
-import { list as listMember, detail as getMemberDetail, updateDetail as updateMemberDetail, add as addMember, remove as removeMember, } from 'api/member'
-import { list as listRole, addMemberRole, removeMemberRole } from 'api/role'
+import { listRoom, listAmenity, detail as getMemberDetail, updateDetail as updateMemberDetail, add as addMember, remove as removeMember, } from 'api/component'
+import { addMemberRole, removeMemberRole } from 'api/role'
 import { getName as getFakeName } from 'api/fake'
 
 const store = useStore()
-const member = computed(() => store.getters.member.member)
+const room = computed(() => store.getters.room.room)
 
-const memberStatusMap = ref([])
-const memberLockMap = ref([])
-const memberGenderMap = ref([])
+const roomStatusMap = ref([])
+const roomLockMap = ref([])
+const roomGenderMap = ref([])
 
 onMounted(async () => {
-  const dataList = await Pair.getValueByKey(['memberStatusMap', 'memberLockMap', 'memberGenderMap'])
-  memberStatusMap.value = dataList[0].value
-  memberLockMap.value = dataList[1].value
-  memberGenderMap.value = dataList[2].value
-  await getMemberList()
+  const dataList = await Pair.getValueByKey(['roomStatusMap', 'roomLockMap', 'roomGenderMap'])
+  roomStatusMap.value = dataList[0].value
+  roomLockMap.value = dataList[1].value
+  roomGenderMap.value = dataList[2].value
+  await getRoomList()
 })
 
-const memberListLoading = ref(false)
-const memberList = ref([])
-const roleList = ref([])
+const roomListLoading = ref(false)
+const roomList = ref([])
+const amenities = ref([])
 const roleSelectIdList = ref([])
 const roleTree = ref([])
 const roleProps = {
@@ -230,13 +232,13 @@ const onSearchLoading = ref(false)
 const onSearchDisabled = ref(false)
 const searchFormRef = ref(null)
 const searchForm = reactive({
-  member: {
+  room: {
     username: null,
     status: null,
   },
-  memberData: {
-    nickname: null,
-    gender: null,
+  roomData: {
+    description: null,
+    villaId: null,
   },
   role: {
     name: null,
@@ -247,7 +249,7 @@ const searchForm = reactive({
 
 const onSearch = () => {
   searched.value = true
-  getMemberList()
+  getRoomList()
 }
 
 const restSearchLoading = ref(false)
@@ -259,7 +261,7 @@ const restSearch = async (formEl) => {
   restSearchDisabled.value = true
   resetForm(formEl)
   try {
-    await getMemberList()
+    await getRoomList()
   } finally {
     restSearchLoading.value = false
     restSearchDisabled.value = false
@@ -279,12 +281,12 @@ const page = reactive({
 const handleSizeChange = (pageSize) => {
   page.pageSize = pageSize
   page.currentPage = 1
-  getMemberList()
+  getRoomList()
 }
 
 const handleCurrentChange = (currentPage) => {
   page.currentPage = currentPage
-  getMemberList()
+  getRoomList()
 }
 
 const getIndex = (index) => {
@@ -293,10 +295,10 @@ const getIndex = (index) => {
 
 const getRoleList = () => {
   return new Promise((resolve, reject) => {
-    listRole()
+    listAmenity()
       .then((response) => {
-        roleList.value = response.data.list
-        roleTree.value = list2Tree(response.data.list)
+        amenities.value = response.data.list
+        // roleTree.value = list2Tree(response.data.list)
         resolve(response)
       })
       .catch((error) => {
@@ -307,16 +309,16 @@ const getRoleList = () => {
   })
 }
 
-const getMemberList = () => {
+const getRoomList = () => {
   return new Promise((resolve, reject) => {
-    memberListLoading.value = true
+    roomListLoading.value = true
     onSearchLoading.value = true
     onSearchDisabled.value = true
     searchForm.currentPage = page.currentPage
     searchForm.pageSize = page.pageSize
-    listMember(searchForm)
+    listRoom(searchForm)
       .then((response) => {
-        memberList.value = response.data.list
+        roomList.value = response.data.list
         page.totalData = response.data.total
         page.currentPage = response.data.currentPage
         page.pageSize = response.data.pageSize
@@ -324,12 +326,12 @@ const getMemberList = () => {
         resolve(response)
       })
       .catch((error) => {
-        ElMessage.error('Get member list error')
-        console.error('Get member list error', error)
+        ElMessage.error('Get room list error')
+        console.error('Get room list error', error)
         reject(error)
       })
       .finally(() => {
-        memberListLoading.value = false
+        roomListLoading.value = false
         onSearchLoading.value = false
         onSearchDisabled.value = false
       })
@@ -352,36 +354,36 @@ const submitMemberLoading = ref(false)
 const submitMemberDisabled = ref(false)
 const getFakeNicknameLoading = ref(false)
 const getFakeNicknameDisabled = ref(false)
-const memberFormRef = ref(null)
-const defaultMemberForm = () => {
+const roomFormRef = ref(null)
+const defaultRoomForm = () => {
   return {
-    member: {
+    room: {
       id: null,
       username: null,
       password: null,
       status: null,
-      lock: null,
+      maxPersons: null,
     },
-    memberData: {
-      avatar: null,
-      nickname: null,
-      gender: null,
+    roomData: {
+      images: null,
+      description: null,
+      villaId: null,
     },
   }
 }
-const memberForm = reactive(defaultMemberForm())
+const roomForm = reactive(defaultRoomForm())
 
-// ------- add member -------
+// ------- add room -------
 const getFakeNickname = () => {
   getFakeNicknameLoading.value = true
   getFakeNicknameDisabled.value = true
   getFakeName()
     .then((response) => {
-      memberForm.memberData.nickname = response.data
+      roomForm.roomData.description = response.data
     })
     .catch((error) => {
-      ElMessage.error('Get fake nickname error')
-      console.error('Get fake nickname error', error)
+      ElMessage.error('Get fake description error')
+      console.error('Get fake description error', error)
     })
     .finally(() => {
       getFakeNicknameLoading.value = false
@@ -390,7 +392,7 @@ const getFakeNickname = () => {
 }
 
 const showAddMemberDialog = async () => {
-  Object.assign(memberForm, defaultMemberForm())
+  Object.assign(roomForm, defaultRoomForm())
   await getRoleList()
   dialogMemberStatus.value = 'add'
   dialogMemberVisible.value = true
@@ -399,15 +401,15 @@ const showAddMemberDialog = async () => {
 const onAddMember = () => {
   submitMemberLoading.value = true
   submitMemberDisabled.value = true
-  addMember(memberForm)
+  addMember(roomForm)
     .then(async () => {
-      await getMemberList()
-      ElMessage.success('Add member success')
+      await getRoomList()
+      ElMessage.success('Add room success')
       dialogMemberVisible.value = false
     })
     .catch((error) => {
-      ElMessage.error('Add member error')
-      console.error('Add member error', error)
+      ElMessage.error('Add room error')
+      console.error('Add room error', error)
     })
     .finally(() => {
       submitMemberLoading.value = false
@@ -415,7 +417,7 @@ const onAddMember = () => {
     })
 }
 
-// ------- update member -------
+// ------- update room -------
 const validateUsername = (rule, value, callback) => {
   if (!value) {
     submitMemberDisabled.value = true
@@ -444,7 +446,7 @@ const validatePassword = (rule, value, callback) => {
 const validateNickname = (rule, value, callback) => {
   if (!value) {
     submitMemberDisabled.value = true
-    callback(new Error('Please input nickname'))
+    callback(new Error('Please input description'))
   } else {
     if (value.length < 3) {
       submitMemberDisabled.value = true
@@ -456,43 +458,43 @@ const validateNickname = (rule, value, callback) => {
   }
 }
 
-const memberFormRules = reactive({
-  member: {
+const roomFormRules = reactive({
+  room: {
     username: [{ trigger: ['change', 'blur'], validator: validateUsername }],
     password: [{ trigger: ['change', 'blur'], validator: validatePassword }],
   },
-  memberData: {
-    nickname: [{ trigger: ['change', 'blur'], validator: validateNickname }],
+  roomData: {
+    description: [{ trigger: ['change', 'blur'], validator: validateNickname }],
   },
 })
 
-const showUpdateMemberDialog = (memberId) => {
-  Object.assign(memberForm, defaultMemberForm())
-  getMemberDetail({ id: memberId })
+const showUpdateMemberDialog = (roomId) => {
+  Object.assign(roomForm, defaultRoomForm())
+  getMemberDetail({ id: roomId })
     .then((response) => {
-      memberForm.member = response.data.member
-      memberForm.memberData = response.data.memberData
+      roomForm.room = response.data.room
+      roomForm.roomData = response.data.roomData
       dialogMemberStatus.value = 'update'
       dialogMemberVisible.value = true
     })
     .catch((error) => {
-      ElMessage.error('Get member detail error')
-      console.error('Get member detail error', error)
+      ElMessage.error('Get room detail error')
+      console.error('Get room detail error', error)
     })
 }
 
 const onUpdateMember = () => {
   submitMemberLoading.value = true
   submitMemberDisabled.value = true
-  updateMemberDetail(memberForm)
+  updateMemberDetail(roomForm)
     .then(async () => {
-      await getMemberList()
-      ElMessage.success('Update member detail success')
+      await getRoomList()
+      ElMessage.success('Update room detail success')
       dialogMemberVisible.value = false
     })
     .catch((error) => {
-      ElMessage.error('Update member detail error')
-      console.error('Update member detail error', error)
+      ElMessage.error('Update room detail error')
+      console.error('Update room detail error', error)
     })
     .finally(() => {
       submitMemberLoading.value = false
@@ -500,33 +502,33 @@ const onUpdateMember = () => {
     })
 }
 
-// ------- update member role -------
+// ------- update room role -------
 const submitMemberRoleLoading = ref(false)
 const submitMemberRoleDisabled = ref(false)
 const dialogUpdateMemberRoleVisible = ref(false)
 
 const defaultMemberRoleForm = () => {
   return {
-    memberId: null,
+    roomId: null,
     roleId: null,
-    roleList: [],
+    amenities: [],
   }
 }
-const memberRoleFormRef = ref(null)
-const memberRoleForm = reactive(defaultMemberRoleForm())
+const roomRoleFormRef = ref(null)
+const roomRoleForm = reactive(defaultMemberRoleForm())
 
-const showUpdateMemberRoleDialog = (memberId) => {
-  Object.assign(memberRoleForm, defaultMemberRoleForm())
-  getMemberDetail({ id: memberId })
+const showUpdateMemberRoleDialog = (roomId) => {
+  Object.assign(roomRoleForm, defaultMemberRoleForm())
+  getMemberDetail({ id: roomId })
     .then(async (response) => {
-      memberRoleForm.memberId = response.data.member.id
-      memberRoleForm.roleList = response.data.roleList
+      roomRoleForm.roomId = response.data.room.id
+      roomRoleForm.amenities = response.data.amenities
       await getRoleList()
       dialogUpdateMemberRoleVisible.value = true
     })
     .catch((error) => {
-      ElMessage.error('Get member detail error')
-      console.error('Get member detail error', error)
+      ElMessage.error('Get room detail error')
+      console.error('Get room detail error', error)
     })
 }
 
@@ -535,13 +537,13 @@ const handleRoleChange = (value) => {
     return
   }
   const roleId = Object.values(value).pop()
-  for (let i = 0; i < memberRoleForm.roleList.length; i++) {
-    if (memberRoleForm.roleList[i].id === roleId) {
+  for (let i = 0; i < roomRoleForm.amenities.length; i++) {
+    if (roomRoleForm.amenities[i].id === roleId) {
       roleSelectIdList.value = []
       return ElMessage.error('Member already assumed this role')
     }
   }
-  memberRoleForm.roleId = roleId
+  roomRoleForm.roleId = roleId
 }
 
 let isMemberRoleUpdate = false
@@ -549,16 +551,16 @@ let isMemberRoleUpdate = false
 const onRemoveMemberRole = (index) => {
   submitMemberRoleLoading.value = true
   submitMemberRoleDisabled.value = true
-  const roleId = memberRoleForm.roleList[index].id
-  removeMemberRole({ roleId: roleId, memberId: memberRoleForm.memberId })
+  const roleId = roomRoleForm.amenities[index].id
+  removeMemberRole({ roleId: roleId, roomId: roomRoleForm.roomId })
     .then(() => {
       isMemberRoleUpdate = true
-      memberRoleForm.roleList.splice(index, 1)
-      ElMessage.success('Remove member role success')
+      roomRoleForm.amenities.splice(index, 1)
+      ElMessage.success('Remove room role success')
     })
     .catch((error) => {
-      ElMessage.error('Remove member role error')
-      console.error('Remove member role error', error)
+      ElMessage.error('Remove room role error')
+      console.error('Remove room role error', error)
     })
     .finally(() => {
       submitMemberRoleLoading.value = false
@@ -570,18 +572,18 @@ const onAddMemberRole = () => {
   submitMemberRoleLoading.value = true
   submitMemberRoleDisabled.value = true
   addMemberRole({
-    roleId: memberRoleForm.roleId,
-    memberId: memberRoleForm.memberId,
+    roleId: roomRoleForm.roleId,
+    roomId: roomRoleForm.roomId,
   })
     .then((response) => {
       isMemberRoleUpdate = true
       roleSelectIdList.value = []
-      memberRoleForm.roleList.push(response.data)
-      ElMessage.success('Add member role success')
+      roomRoleForm.amenities.push(response.data)
+      ElMessage.success('Add room role success')
     })
     .catch((error) => {
-      ElMessage.error('Add member role error')
-      console.error('Add member role error', error)
+      ElMessage.error('Add room role error')
+      console.error('Add room role error', error)
     })
     .finally(() => {
       submitMemberRoleLoading.value = false
@@ -592,23 +594,23 @@ const onAddMemberRole = () => {
 const onCloseDialogUpdateMemberRole = async () => {
   if (isMemberRoleUpdate) {
     isMemberRoleUpdate = false
-    await getMemberList()
+    await getRoomList()
     dialogUpdateMemberRoleVisible.value = false
   } else {
     dialogUpdateMemberRoleVisible.value = false
   }
 }
 
-// ------- remove member -------
-const onRemove = (memberId) => {
-  removeMember({ id: memberId })
+// ------- remove room -------
+const onRemove = (roomId) => {
+  removeMember({ id: roomId })
     .then(async () => {
-      await getMemberList()
-      ElMessage.success('Remove member success')
+      await getRoomList()
+      ElMessage.success('Remove room success')
     })
     .catch((error) => {
-      ElMessage.error('Remove member error')
-      console.error('Remove member error', error)
+      ElMessage.error('Remove room error')
+      console.error('Remove room error', error)
     })
 }
 </script>
