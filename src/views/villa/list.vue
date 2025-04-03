@@ -88,17 +88,17 @@
           <div>{{ scope.row.villa.created_at }}</div>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="Operations" v-permission:or="['villa:update', 'villa:remove']">
+      <el-table-column fixed="right" label="Operations">
         <template #default="scope">
-          <template v-if="scope.row.villaData.id !== villa.id">
+          <template v-if="true">
             <el-space wrap>
-              <span v-permission="'villa:update'">
+              <span >
                 <el-button @click="
                   showUpdateMemberRoleDialog(scope.row.villaData.id)
                   ">Update Role</el-button>
-                <el-button @click="showUpdateMemberDialog(scope.row.villaData.id)">Update Member</el-button>
+                <el-button @click="showUpdateVillaDialog(scope.row.villaData.id)">Update Villa</el-button>
               </span>
-              <span v-permission="'villa:remove'" v-if="scope.row.villa.maxRoom === 0">
+              <span v-if="scope.row.villa.maxRoom === 0">
                 <el-popconfirm confirm-button-text="Yes" cancel-button-text="No" icon-color="red"
                   :title="`Are you sure to remove this villa: ${scope.row.villa.name}?`"
                   @confirm="onRemove(scope.row.villaData.id)">
@@ -203,7 +203,7 @@ import { useStore } from 'vuex'
 import { resetForm, allEmpty } from 'utils/form'
 import { list2Tree } from 'utils/tree'
 import Pair from 'utils/Pair'
-import { listVilla, listAmenity, detail as getMemberDetail, updateDetail as updateMemberDetail, add as addMember, remove as removeMember, } from 'api/villa'
+import { listVilla, listAmenity, detail as getVillaDetail, updateDetail as updateMemberDetail, add as addMember, remove as removeMember, } from 'api/villa'
 import { addMemberRole, removeMemberRole } from 'api/role'
 import { getName as getFakeName } from 'api/fake'
 
@@ -498,9 +498,9 @@ const villaFormRules = reactive({
   },
 })
 
-const showUpdateMemberDialog = (provinceCode) => {
+const showUpdateVillaDialog = (provinceCode) => {
   Object.assign(villaForm, defaultVillaForm())
-  getMemberDetail({ id: provinceCode })
+  getVillaDetail({ id: provinceCode })
     .then((response) => {
       villaForm.villa = response.data.villa
       villaForm.villaData = response.data.villaData
@@ -549,7 +549,7 @@ const villaRoleForm = reactive(defaultMemberRoleForm())
 
 const showUpdateMemberRoleDialog = (provinceCode) => {
   Object.assign(villaRoleForm, defaultMemberRoleForm())
-  getMemberDetail({ id: provinceCode })
+  getVillaDetail({ id: provinceCode })
     .then(async (response) => {
       villaRoleForm.provinceCode = response.data.villa.id
       villaRoleForm.amenities = response.data.amenities
