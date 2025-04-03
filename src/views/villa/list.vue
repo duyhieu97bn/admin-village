@@ -116,15 +116,15 @@
       v-model:page-size="page.pageSize" :page-sizes="page.pageSizes" :total="page.totalData"
       @size-change="handleSizeChange" @current-change="handleCurrentChange">
     </el-pagination>
-    <!--  -->
-    <el-dialog v-model="dialogMemberVisible" :title="dialogMemberStatusMap[dialogMemberStatus].title" destroy-on-close>
+    <!-- Modal Add villa -->
+    <el-dialog v-model="dialogVillaVisible" :title="dialogVillaStatusMap[dialogVillaStatus].title" destroy-on-close>
       <el-form ref="villaFormRef" :model="villaForm" :rules="villaFormRules" status-icon label-position="left"
         label-width="100px">
         <el-form-item label="Name" prop="villa.name">
           <el-input type="text" autocomplete="off" prefix-icon="user" v-model="villaForm.villa.name">
             <template #append>
-              <el-button icon="refresh-right" @click="getFakeNickname" :loading="getFakeNicknameLoading"
-                :disabled="getFakeNicknameDisabled" />
+              <el-button icon="refresh-right" @click="getFakeVillaName" :loading="getFakeVillaNameLoading"
+                :disabled="getFakeVillaNameDisabled" />
             </template>
           </el-input>
         </el-form-item>
@@ -162,10 +162,10 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogMemberVisible = false">Cancel</el-button>
+          <el-button @click="dialogVillaVisible = false">Cancel</el-button>
           <el-button type="danger" @click="resetForm(villaFormRef)">Reset</el-button>
           <el-button type="primary" :loading="submitMemberLoading" :disabled="submitMemberDisabled"
-            @click="dialogMemberStatusMap[dialogMemberStatus].submitAction(villaFormRef)">Confirm
+            @click="dialogVillaStatusMap[dialogVillaStatus].submitAction(villaFormRef)">Confirm
           </el-button>
         </span>
       </template>
@@ -368,22 +368,22 @@ const getVillaList = () => {
   })
 }
 
-const dialogMemberStatusMap = {
+const dialogVillaStatusMap = {
   add: {
-    title: 'Add Member',
-    submitAction: (formEl) => onAddMember(formEl),
+    title: 'Add Villa',
+    submitAction: (formEl) => onAddVilla(formEl),
   },
   update: {
     title: 'Update Member',
     submitAction: (formEl) => onUpdateMember(formEl),
   },
 }
-const dialogMemberStatus = ref('add')
-const dialogMemberVisible = ref(false)
+const dialogVillaStatus = ref('add')
+const dialogVillaVisible = ref(false)
 const submitMemberLoading = ref(false)
 const submitMemberDisabled = ref(false)
-const getFakeNicknameLoading = ref(false)
-const getFakeNicknameDisabled = ref(false)
+const getFakeVillaNameLoading = ref(false)
+const getFakeVillaNameDisabled = ref(false)
 const villaFormRef = ref(null)
 const defaultVillaForm = () => {
   return {
@@ -404,38 +404,38 @@ const defaultVillaForm = () => {
 const villaForm = reactive(defaultVillaForm())
 
 // ------- add villa -------
-const getFakeNickname = () => {
-  getFakeNicknameLoading.value = true
-  getFakeNicknameDisabled.value = true
+const getFakeVillaName = () => {
+  getFakeVillaNameLoading.value = true
+  getFakeVillaNameDisabled.value = true
   getFakeName()
     .then((response) => {
-      villaForm.villaData.description = response.data
+      villaForm.villa.name = response.data
     })
     .catch((error) => {
-      ElMessage.error('Get fake description error')
-      console.error('Get fake description error', error)
+      ElMessage.error('Get fake name error')
+      console.error('Get fake name error', error)
     })
     .finally(() => {
-      getFakeNicknameLoading.value = false
-      getFakeNicknameDisabled.value = false
+      getFakeVillaNameLoading.value = false
+      getFakeVillaNameDisabled.value = false
     })
 }
 
 const showAddMemberDialog = async () => {
   Object.assign(villaForm, defaultVillaForm())
   await getRoleList()
-  dialogMemberStatus.value = 'add'
-  dialogMemberVisible.value = true
+  dialogVillaStatus.value = 'add'
+  dialogVillaVisible.value = true
 }
 
-const onAddMember = () => {
+const onAddVilla = () => {
   submitMemberLoading.value = true
   submitMemberDisabled.value = true
   addMember(villaForm)
     .then(async () => {
       await getVillaList()
       ElMessage.success('Add villa success')
-      dialogMemberVisible.value = false
+      dialogVillaVisible.value = false
     })
     .catch((error) => {
       ElMessage.error('Add villa error')
@@ -504,8 +504,8 @@ const showUpdateMemberDialog = (provinceCode) => {
     .then((response) => {
       villaForm.villa = response.data.villa
       villaForm.villaData = response.data.villaData
-      dialogMemberStatus.value = 'update'
-      dialogMemberVisible.value = true
+      dialogVillaStatus.value = 'update'
+      dialogVillaVisible.value = true
     })
     .catch((error) => {
       ElMessage.error('Get villa detail error')
@@ -520,7 +520,7 @@ const onUpdateMember = () => {
     .then(async () => {
       await getVillaList()
       ElMessage.success('Update villa detail success')
-      dialogMemberVisible.value = false
+      dialogVillaVisible.value = false
     })
     .catch((error) => {
       ElMessage.error('Update villa detail error')
