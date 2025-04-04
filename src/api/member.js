@@ -2,6 +2,14 @@ import request from 'utils/request'
 
 const group = '/member'
 
+export function isMemberExist(data) {
+  return request({
+    url: `/${group}/isMemberExist`,
+    method: 'POST',
+    data: data
+  })
+}
+
 export function detail(data) {
   return request({
     url: `${group}/detail`,

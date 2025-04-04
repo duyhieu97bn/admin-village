@@ -1,14 +1,14 @@
 <template>
   <div class="app-container">
     <!-- filter container -->
-    <!-- <div class="filter-container" v-permission="'room:list'">
+    <div class="filter-container">
       <el-form :inline="true" ref="searchFormRef" :model="searchForm">
         <el-form-item>
           <el-button type="success" icon="refresh" circle @click="getRoomList"></el-button>
-          <el-button type="primary" icon="plus" circle v-permission="'room:add'" @click="showAddMemberDialog">
+          <el-button type="primary" icon="plus" circle  @click="showAddMemberDialog">
           </el-button>
         </el-form-item>
-        <el-form-item label="Username" prop="room.title">
+        <el-form-item label="Title" prop="room.title">
           <el-input v-model="searchForm.room.title" />
         </el-form-item>
         <el-form-item label="Status" prop="room.status">
@@ -17,17 +17,14 @@
               :disabled="item.value === searchForm.room.status" />
           </el-select>
         </el-form-item>
-        <el-form-item label="Nickname" prop="roomData.description">
+        <el-form-item label="Description" prop="roomData.description">
           <el-input v-model="searchForm.roomData.description" />
         </el-form-item>
-        <el-form-item label="Gender" prop="roomData.villaId">
+        <el-form-item label="Villa Id" prop="roomData.villaId">
           <el-select v-model="searchForm.roomData.villaId" clearable>
             <el-option v-for="item in roomGenderMap" :key="item.value" :label="item.label" :value="item.value"
               :disabled="item.value === searchForm.roomData.villaId" />
           </el-select>
-        </el-form-item>
-        <el-form-item label="RoleName" prop="role.name">
-          <el-input v-model="searchForm.role.name" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="search" circle :loading="onSearchLoading" :disabled="onSearchDisabled"
@@ -39,7 +36,7 @@
           " @click="restSearch(searchFormRef)"></el-button>
         </el-form-item>
       </el-form>
-    </div> -->
+    </div>
     <!-- Header table -->
     <el-table v-loading="roomListLoading" :data="roomList" border highlight-current-row style="width: 100%">
       <el-table-column type="index" :index="getIndex" />
@@ -51,26 +48,10 @@
       <el-table-column label="Title" prop="room.title" width="150" />
       <el-table-column label="Description" prop="roomData.description" width="150" />
       <el-table-column label="Villa ID" prop="roomData.villaId" width="100">
-        <!-- <template #default="scope">
-          <el-tag size="small" v-if="roomGenderMap.length > 0"
-            :type="roomGenderMap[scope.row.roomData.villaId].color">
-            {{ roomGenderMap[scope.row.roomData.villaId].label }}
-          </el-tag>
-        </template> -->
       </el-table-column>
       <el-table-column label="Status" prop="room.status" width="100">
-        <!-- <template #default="scope">
-          <el-tag size="small" v-if="roomStatusMap.length > 0" :type="roomStatusMap[scope.row.room.status].color">
-            {{ roomStatusMap[scope.row.room.status].label }}
-          </el-tag>
-        </template> -->
       </el-table-column>
       <el-table-column label="Max Persons" prop="room.maxPersons" width="100">
-        <!-- <template #default="scope">
-          <el-tag size="small" v-if="roomLockMap.length > 0" :type="roomLockMap[scope.row.room.maxPersons].color">
-            {{ roomLockMap[scope.row.room.maxPersons].label }}
-          </el-tag>
-        </template> -->
       </el-table-column>
       <el-table-column label="Amenities" width="130">
         <template #default="scope">
@@ -89,15 +70,12 @@
           <div>{{ scope.row.room.created_at }}</div>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="Operations" v-permission:or="['room:update', 'room:remove']">
+      <el-table-column fixed="right" label="Operations" >
         <template #default="scope">
-          <template v-if="scope.row.room.room_id !== room.id">
+          <template v-if="true">
             <el-space wrap>
-              <span v-permission="'room:update'">
-                <el-button @click="
-                  showUpdateMemberRoleDialog(scope.row.room.room_id)
-                ">Update Role</el-button>
-                <el-button @click="showUpdateMemberDialog(scope.row.room.room_id)">Update Member</el-button>
+              <span >
+                <el-button @click="showUpdateRoomDialog(scope.row.room.room_id)">Update Room</el-button>
               </span>
               <span v-permission="'room:remove'" v-if="scope.row.room.maxPersons === 0">
                 <el-popconfirm confirm-button-text="Yes" cancel-button-text="No" icon-color="red"
@@ -113,7 +91,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <!--  -->
+    <!-- Add/Update-->
     <el-pagination background layout="total, sizes, prev, pager, next, jumper" v-model:currentPage="page.currentPage"
       v-model:page-size="page.pageSize" :page-sizes="page.pageSizes" :total="page.totalData"
       @size-change="handleSizeChange" @current-change="handleCurrentChange">
@@ -164,30 +142,6 @@
         </span>
       </template>
     </el-dialog>
-
-    <el-dialog v-model="dialogUpdateMemberRoleVisible" title="Update Member Role" destroy-on-close>
-      <el-form ref="roomRoleFormRef" :model="roomRoleForm" label-position="left" label-width="110px">
-        <el-form-item label="Current Role">
-          <template v-for="(role, index) in roomRoleForm.amenities" :key="role.id">
-            <el-tag size="small" effect="plain" class="mr-1" closable @close="onRemoveMemberRole(index)">{{ role.name }}
-            </el-tag>
-          </template>
-        </el-form-item>
-        <el-form-item label="New Role">
-          <el-cascader v-model="roleSelectIdList" :options="roleTree" :props="roleProps" @change="handleRoleChange"
-            filterable />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" :loading="submitMemberRoleLoading" :disabled="submitMemberRoleDisabled"
-            @click="onAddMemberRole">Add</el-button>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="onCloseDialogUpdateMemberRole">Close</el-button>
-        </span>
-      </template>
-    </el-dialog>
   </div>
 </template>
 
@@ -195,7 +149,6 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { resetForm, allEmpty } from 'utils/form'
-import { list2Tree } from 'utils/tree'
 import Pair from 'utils/Pair'
 import { listRoom, listAmenity, detail as getMemberDetail, updateDetail as updateMemberDetail, add as addMember, remove as removeMember, } from 'api/component'
 import { addMemberRole, removeMemberRole } from 'api/role'
@@ -220,12 +173,6 @@ const roomListLoading = ref(false)
 const roomList = ref([])
 const amenities = ref([])
 const roleSelectIdList = ref([])
-const roleTree = ref([])
-const roleProps = {
-  value: 'id',
-  label: 'name',
-  checkStrictly: true,
-}
 
 const searched = ref(false)
 const onSearchLoading = ref(false)
@@ -468,7 +415,7 @@ const roomFormRules = reactive({
   },
 })
 
-const showUpdateMemberDialog = (roomId) => {
+const showUpdateRoomDialog = (roomId) => {
   Object.assign(roomForm, defaultRoomForm())
   getMemberDetail({ id: roomId })
     .then((response) => {
@@ -500,105 +447,6 @@ const onUpdateMember = () => {
       submitMemberLoading.value = false
       submitMemberDisabled.value = false
     })
-}
-
-// ------- update room role -------
-const submitMemberRoleLoading = ref(false)
-const submitMemberRoleDisabled = ref(false)
-const dialogUpdateMemberRoleVisible = ref(false)
-
-const defaultMemberRoleForm = () => {
-  return {
-    roomId: null,
-    roleId: null,
-    amenities: [],
-  }
-}
-const roomRoleFormRef = ref(null)
-const roomRoleForm = reactive(defaultMemberRoleForm())
-
-const showUpdateMemberRoleDialog = (roomId) => {
-  Object.assign(roomRoleForm, defaultMemberRoleForm())
-  getMemberDetail({ id: roomId })
-    .then(async (response) => {
-      roomRoleForm.roomId = response.data.room.id
-      roomRoleForm.amenities = response.data.amenities
-      await getRoleList()
-      dialogUpdateMemberRoleVisible.value = true
-    })
-    .catch((error) => {
-      ElMessage.error('Get room detail error')
-      console.error('Get room detail error', error)
-    })
-}
-
-const handleRoleChange = (value) => {
-  if (!value) {
-    return
-  }
-  const roleId = Object.values(value).pop()
-  for (let i = 0; i < roomRoleForm.amenities.length; i++) {
-    if (roomRoleForm.amenities[i].id === roleId) {
-      roleSelectIdList.value = []
-      return ElMessage.error('Member already assumed this role')
-    }
-  }
-  roomRoleForm.roleId = roleId
-}
-
-let isMemberRoleUpdate = false
-
-const onRemoveMemberRole = (index) => {
-  submitMemberRoleLoading.value = true
-  submitMemberRoleDisabled.value = true
-  const roleId = roomRoleForm.amenities[index].id
-  removeMemberRole({ roleId: roleId, roomId: roomRoleForm.roomId })
-    .then(() => {
-      isMemberRoleUpdate = true
-      roomRoleForm.amenities.splice(index, 1)
-      ElMessage.success('Remove room role success')
-    })
-    .catch((error) => {
-      ElMessage.error('Remove room role error')
-      console.error('Remove room role error', error)
-    })
-    .finally(() => {
-      submitMemberRoleLoading.value = false
-      submitMemberRoleDisabled.value = false
-    })
-}
-
-const onAddMemberRole = () => {
-  submitMemberRoleLoading.value = true
-  submitMemberRoleDisabled.value = true
-  addMemberRole({
-    roleId: roomRoleForm.roleId,
-    roomId: roomRoleForm.roomId,
-  })
-    .then((response) => {
-      isMemberRoleUpdate = true
-      roleSelectIdList.value = []
-      roomRoleForm.amenities.push(response.data)
-      ElMessage.success('Add room role success')
-    })
-    .catch((error) => {
-      ElMessage.error('Add room role error')
-      console.error('Add room role error', error)
-    })
-    .finally(() => {
-      submitMemberRoleLoading.value = false
-      submitMemberRoleDisabled.value = false
-    })
-}
-
-const onCloseDialogUpdateMemberRole = async () => {
-  if (isMemberRoleUpdate) {
-    isMemberRoleUpdate = false
-    await getRoomList()
-    dialogUpdateMemberRoleVisible.value = false
-  } else {
-    dialogUpdateMemberRoleVisible.value = false
-  }
 }
 
 // ------- remove room -------

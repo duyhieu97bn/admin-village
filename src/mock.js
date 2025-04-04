@@ -25,6 +25,7 @@ if (process.env.NODE_ENV == 'development') {
     // villa
     mock.onPost('/api/villa/listVilla').reply(200, villa.listVilla);
     mock.onPost('/api/villa/listAmenity').reply(200, villa.listAmenity);
+    mock.onPost('/api/villa/detail').reply(200, villa.detail);
     //
     mock.onPost('/api/member/list').reply(200, member.list);
     mock.onPost('/api/role/list').reply(200, member.list);

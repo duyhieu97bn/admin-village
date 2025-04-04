@@ -34,7 +34,9 @@
                         "pricePerMonth": 1000,
                         "id": 1,
                         "address": "member1@example.com",
-                        "images": ["https://picsum.photos/200"],
+                        "images": [
+                            "https://picsum.photos/200"
+                        ],
                         "role": "admin",
                         "deletedAt": null,
                         "phone": "123456789",
@@ -73,7 +75,9 @@
                         "pricePerMonth": 1000,
                         "id": 2,
                         "address": "member2@example.com",
-                        "images": ["https://picsum.photos/200"],
+                        "images": [
+                            "https://picsum.photos/200"
+                        ],
                         "role": "admin",
                         "deletedAt": null,
                         "phone": "123456789",
@@ -112,7 +116,9 @@
                         "pricePerMonth": 1000,
                         "id": 3,
                         "address": "member3@example.com",
-                        "images": ["https://picsum.photos/200"],
+                        "images": [
+                            "https://picsum.photos/200"
+                        ],
                         "role": "admin",
                         "deletedAt": null,
                         "phone": "123456789",
@@ -151,7 +157,9 @@
                         "pricePerMonth": 1000,
                         "id": 4,
                         "address": "member4@example.com",
-                        "images": ["https://picsum.photos/200"],
+                        "images": [
+                            "https://picsum.photos/200"
+                        ],
                         "role": "admin",
                         "deletedAt": null,
                         "phone": "123456789",
@@ -190,7 +198,9 @@
                         "pricePerMonth": 1000,
                         "id": 5,
                         "address": "member5@example.com",
-                        "images": ["https://picsum.photos/200"],
+                        "images": [
+                            "https://picsum.photos/200"
+                        ],
                         "role": "admin",
                         "deletedAt": null,
                         "phone": "123456789",
@@ -213,6 +223,32 @@
             "currentPage": 1,
             "pageSize": 10,
             "totalPage": 1
+        }
+    },
+    "detail": {
+        "message": "success",
+        "data": {
+            "villa": {
+                "name": "admin",
+                "status": 1,
+                "maxRoom": 0,
+                "created_at": "2022-01-01T00:00:00.000Z",
+                "logined_at": "2022-01-01T00:00:00.000Z"
+            },
+            "villaData": {
+                "pricePerNight": 1000,
+                "pricePerMonth": 1000,
+                "id": 1,
+                "address": "member1@example.com",
+                "images": [
+                    "https://picsum.photos/200"
+                ],
+                "role": "admin",
+                "deletedAt": null,
+                "phone": "123456789",
+                "description": "description",
+                "provinceCode": 0
+            }
         }
     }
 }

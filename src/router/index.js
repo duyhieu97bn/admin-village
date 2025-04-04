@@ -43,15 +43,10 @@ export const constRouters = [
         name: 'Room',
         meta: { icon: 'user', dropDown: true, },
         children: [{
-            path: 'profile',
-            name: 'Room Profile',
-            component: _import('room/profile'),
-            meta: { auth: true }
-        }, {
             path: 'list',
             name: 'Room Manage',
             component: _import('room/list'),
-            meta: { icon: 'user', auth: true}
+            meta: { icon: 'user', auth: true }
         },]
     },
     {
@@ -60,63 +55,58 @@ export const constRouters = [
         name: 'Villa',
         meta: { icon: 'user', dropDown: true, },
         children: [{
-            path: 'profile',
-            name: 'Villa Profile',
-            component: _import('villa/profile'),
-            meta: { auth: true }
-        }, {
             path: 'list',
             name: 'Villa Manage',
             component: _import('villa/list'),
-            meta: { icon: 'user', auth: true}
+            meta: { icon: 'user', auth: true }
         },]
     },
-    {
-        path: '/nestedMenu',
-        component: Layout,
-        name: 'Nested Menu',
-        meta: { icon: 'menu', dropDown: true, },
-        children: [{
-            path: '11',
-            name: '11',
-            component: _import('nestedMenu/11'),
-            meta: { icon: 'menu' }
-        }, {
-            path: '12',
-            name: '12',
-            // use empty.vue to be a children placeholder
-            component: _import('empty'),
-            meta: { icon: 'menu', dropDown: true, },
-            children: [{
-                path: '12-21',
-                name: '12-21',
-                component: _import('nestedMenu/12-21'),
-                meta: { icon: 'menu' }
-            }, {
-                path: '12-22',
-                name: '12-22',
-                component: _import('nestedMenu/12-22'),
-                meta: { icon: 'menu' }
-            }, {
-                path: '12-23',
-                name: '12-23',
-                component: _import('empty'),
-                meta: { icon: 'menu', dropDown: true, },
-                children: [{
-                    path: '12-23-31',
-                    name: '12-23-31',
-                    component: _import('nestedMenu/12-23-31'),
-                    meta: { icon: 'menu' }
-                },
-                {
-                    path: '12-23-32',
-                    name: '12-23-32',
-                    component: _import('nestedMenu/12-23-32'),
-                    meta: { icon: 'menu' }
-                }]
-            },]
-        },],
-    },
+    // {
+    //     path: '/nestedMenu',
+    //     component: Layout,
+    //     name: 'Nested Menu',
+    //     meta: { icon: 'menu', dropDown: true, },
+    //     children: [{
+    //         path: '11',
+    //         name: '11',
+    //         component: _import('nestedMenu/11'),
+    //         meta: { icon: 'menu' }
+    //     }, {
+    //         path: '12',
+    //         name: '12',
+    //         // use empty.vue to be a children placeholder
+    //         component: _import('empty'),
+    //         meta: { icon: 'menu', dropDown: true, },
+    //         children: [{
+    //             path: '12-21',
+    //             name: '12-21',
+    //             component: _import('nestedMenu/12-21'),
+    //             meta: { icon: 'menu' }
+    //         }, {
+    //             path: '12-22',
+    //             name: '12-22',
+    //             component: _import('nestedMenu/12-22'),
+    //             meta: { icon: 'menu' }
+    //         }, {
+    //             path: '12-23',
+    //             name: '12-23',
+    //             component: _import('empty'),
+    //             meta: { icon: 'menu', dropDown: true, },
+    //             children: [{
+    //                 path: '12-23-31',
+    //                 name: '12-23-31',
+    //                 component: _import('nestedMenu/12-23-31'),
+    //                 meta: { icon: 'menu' }
+    //             },
+    //             {
+    //                 path: '12-23-32',
+    //                 name: '12-23-32',
+    //                 component: _import('nestedMenu/12-23-32'),
+    //                 meta: { icon: 'menu' }
+    //             }]
+    //         },]
+    //     },],
+    // },
 ]
 
 export const asyncRouters = [
@@ -129,7 +119,7 @@ export const asyncRouters = [
             path: 'profile',
             name: 'Member Profile',
             component: _import('member/profile'),
-            meta: { hidden: true, auth: true }
+            meta: { hidden: true, auth: true, permission: ['member:list'] }
         }, {
             path: 'list',
             name: 'Member Manage',
@@ -149,17 +139,17 @@ export const asyncRouters = [
             meta: { icon: 'user-filled', auth: true, permission: ['role:list'] }
         }]
     },
-    {
-        path: '/imageUpload',
-        component: Layout,
-        name: 'Image Upload',
-        meta: { icon: 'upload', auth: true },
-        children: [{
-            path: 'add',
-            name: 'Image UploadX',
-            component: _import('imageUpload/add'),
-        }]
-    },
+    // {
+    //     path: '/imageUpload',
+    //     component: Layout,
+    //     name: 'Image Upload',
+    //     meta: { icon: 'upload', auth: true },
+    //     children: [{
+    //         path: 'add',
+    //         name: 'Image UploadX',
+    //         component: _import('imageUpload/add'),
+    //     }]
+    // },
     {
         path: '/pair',
         component: Layout,

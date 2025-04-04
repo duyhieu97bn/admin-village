@@ -26,9 +26,6 @@
               :disabled="item.value === searchForm.villaData.provinceCode" />
           </el-select>
         </el-form-item>
-        <!-- <el-form-item label="RoleName" prop="role.name">
-          <el-input v-model="searchForm.role.name" />
-        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" icon="search" circle :loading="onSearchLoading" :disabled="onSearchDisabled"
             @click="onSearch"></el-button>
@@ -49,27 +46,11 @@
       </el-table-column>
       <el-table-column label="Name" prop="villa.name" width="150" />
       <el-table-column label="Description" prop="villaData.description" width="150" />
-      <el-table-column label="Villa ID" prop="villaData.provinceCode" width="100">
-        <!-- <template #default="scope">
-          <el-tag size="small" v-if="villaGenderMap.length > 0"
-            :type="villaGenderMap[scope.row.villaData.provinceCode].color">
-            {{ villaGenderMap[scope.row.villaData.provinceCode].label }}
-          </el-tag>
-        </template> -->
+      <el-table-column label="Province code" prop="villaData.provinceCode" width="100">
       </el-table-column>
       <el-table-column label="Status" prop="villa.status" width="100">
-        <!-- <template #default="scope">
-          <el-tag size="small" v-if="villaStatusMap.length > 0" :type="villaStatusMap[scope.row.villa.status].color">
-            {{ villaStatusMap[scope.row.villa.status].label }}
-          </el-tag>
-        </template> -->
       </el-table-column>
       <el-table-column label="Max Room" prop="villa.maxRoom" width="100">
-        <!-- <template #default="scope">
-          <el-tag size="small" v-if="villaLockMap.length > 0" :type="villaLockMap[scope.row.villa.maxRoom].color">
-            {{ villaLockMap[scope.row.villa.maxRoom].label }}
-          </el-tag>
-        </template> -->
       </el-table-column>
       <el-table-column label="Amenities" width="130">
         <template #default="scope">
@@ -92,10 +73,7 @@
         <template #default="scope">
           <template v-if="true">
             <el-space wrap>
-              <span >
-                <el-button @click="
-                  showUpdateMemberRoleDialog(scope.row.villaData.id)
-                  ">Update Role</el-button>
+              <span>
                 <el-button @click="showUpdateVillaDialog(scope.row.villaData.id)">Update Villa</el-button>
               </span>
               <span v-if="scope.row.villa.maxRoom === 0">
@@ -116,7 +94,7 @@
       v-model:page-size="page.pageSize" :page-sizes="page.pageSizes" :total="page.totalData"
       @size-change="handleSizeChange" @current-change="handleCurrentChange">
     </el-pagination>
-    <!-- Modal Add villa -->
+    <!-- Modal Add/Update villa -->
     <el-dialog v-model="dialogVillaVisible" :title="dialogVillaStatusMap[dialogVillaStatus].title" destroy-on-close>
       <el-form ref="villaFormRef" :model="villaForm" :rules="villaFormRules" status-icon label-position="left"
         label-width="100px">
@@ -132,9 +110,6 @@
           <el-input type="textarea" autocomplete="off" prefix-icon="maxRoom" :rows="2"
             v-model="villaForm.villaData.description" />
         </el-form-item>
-        <!-- <el-form-item label="Password" prop="villa.password">
-          <el-input type="text" autocomplete="off" prefix-icon="maxRoom" v-model="villaForm.villa.password" />
-        </el-form-item> -->
         <el-form-item label="Status" prop="villa.status">
           <el-select v-model="villaForm.villa.status">
             <el-option v-for="item in villaStatusMap" :key="item.value" :label="item.label" :value="item.value"
@@ -151,13 +126,14 @@
           </el-select>
         </el-form-item>
         <el-form-item label="Upload Image" prop="villaData.images">
-            <el-upload class="avatar-uploader" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+          <el-upload class="avatar-uploader" action="http://localhost:8080/uploadImage"
               :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
               <img v-if="imageUrl" :src="imageUrl" class="avatar" />
               <el-icon v-else class="avatar-uploader-icon">
                 <Plus />
               </el-icon>
             </el-upload>
+          <!-- <uploadImage /> -->
         </el-form-item>
       </el-form>
       <template #footer>
@@ -170,41 +146,16 @@
         </span>
       </template>
     </el-dialog>
-
-    <el-dialog v-model="dialogUpdateMemberRoleVisible" title="Update Member Role" destroy-on-close>
-      <el-form ref="villaRoleFormRef" :model="villaRoleForm" label-position="left" label-width="110px">
-        <el-form-item label="Current Role">
-          <template v-for="(role, index) in villaRoleForm.amenities" :key="role.id">
-            <el-tag size="small" effect="plain" class="mr-1" closable @close="onRemoveMemberRole(index)">{{ role.name }}
-            </el-tag>
-          </template>
-        </el-form-item>
-        <el-form-item label="New Role">
-          <el-cascader v-model="roleSelectIdList" :options="roleTree" :props="roleProps" @change="handleRoleChange"
-            filterable />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" :loading="submitMemberRoleLoading" :disabled="submitMemberRoleDisabled"
-            @click="onAddMemberRole">Add</el-button>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="onCloseDialogUpdateMemberRole">Close</el-button>
-        </span>
-      </template>
-    </el-dialog>
   </div>
 </template>
 
 <script setup>
+import uploadImage from '../imageUpload/add.vue'
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { resetForm, allEmpty } from 'utils/form'
-import { list2Tree } from 'utils/tree'
 import Pair from 'utils/Pair'
 import { listVilla, listAmenity, detail as getVillaDetail, updateDetail as updateMemberDetail, add as addMember, remove as removeMember, } from 'api/villa'
-import { addMemberRole, removeMemberRole } from 'api/role'
 import { getName as getFakeName } from 'api/fake'
 
 // upload image
@@ -212,10 +163,12 @@ import { Plus } from '@element-plus/icons-vue'
 
 const imageUrl = ref('')
 
-const handleAvatarSuccess  = (
+const handleAvatarSuccess = (
   response,
   uploadFile
 ) => {
+  console.log(111, uploadFile);
+
   imageUrl.value = URL.createObjectURL(uploadFile.raw)
 }
 
@@ -232,7 +185,6 @@ const beforeAvatarUpload = (rawFile) => {
 // 
 
 const store = useStore()
-const villa = computed(() => store.getters.villa.villa)
 
 const villaStatusMap = ref([])
 const villaLockMap = ref([])
@@ -249,13 +201,6 @@ onMounted(async () => {
 const villaListLoading = ref(false)
 const villaList = ref([])
 const amenities = ref([])
-const roleSelectIdList = ref([])
-const roleTree = ref([])
-const roleProps = {
-  value: 'id',
-  label: 'name',
-  checkStrictly: true,
-}
 
 const searched = ref(false)
 const onSearchLoading = ref(false)
@@ -328,12 +273,11 @@ const getRoleList = () => {
     listAmenity()
       .then((response) => {
         amenities.value = response.data.list
-        // roleTree.value = list2Tree(response.data.list)
         resolve(response)
       })
       .catch((error) => {
-        ElMessage.error('Get role list error')
-        console.error('Get role list error', error)
+        ElMessage.error('Get amenities list error')
+        console.error('Get amenities list error', error)
         reject(error)
       })
   })
@@ -374,8 +318,8 @@ const dialogVillaStatusMap = {
     submitAction: (formEl) => onAddVilla(formEl),
   },
   update: {
-    title: 'Update Member',
-    submitAction: (formEl) => onUpdateMember(formEl),
+    title: 'Update Villa',
+    submitAction: (formEl) => onUpdateVilla(formEl),
   },
 }
 const dialogVillaStatus = ref('add')
@@ -513,7 +457,7 @@ const showUpdateVillaDialog = (provinceCode) => {
     })
 }
 
-const onUpdateMember = () => {
+const onUpdateVilla = () => {
   submitMemberLoading.value = true
   submitMemberDisabled.value = true
   updateMemberDetail(villaForm)
@@ -532,19 +476,12 @@ const onUpdateMember = () => {
     })
 }
 
-// ------- update villa role -------
-const submitMemberRoleLoading = ref(false)
-const submitMemberRoleDisabled = ref(false)
-const dialogUpdateMemberRoleVisible = ref(false)
-
 const defaultMemberRoleForm = () => {
   return {
     provinceCode: null,
-    roleId: null,
     amenities: [],
   }
 }
-const villaRoleFormRef = ref(null)
 const villaRoleForm = reactive(defaultMemberRoleForm())
 
 const showUpdateMemberRoleDialog = (provinceCode) => {
@@ -554,7 +491,6 @@ const showUpdateMemberRoleDialog = (provinceCode) => {
       villaRoleForm.provinceCode = response.data.villa.id
       villaRoleForm.amenities = response.data.amenities
       await getRoleList()
-      dialogUpdateMemberRoleVisible.value = true
     })
     .catch((error) => {
       ElMessage.error('Get villa detail error')
@@ -562,74 +498,6 @@ const showUpdateMemberRoleDialog = (provinceCode) => {
     })
 }
 
-const handleRoleChange = (value) => {
-  if (!value) {
-    return
-  }
-  const roleId = Object.values(value).pop()
-  for (let i = 0; i < villaRoleForm.amenities.length; i++) {
-    if (villaRoleForm.amenities[i].id === roleId) {
-      roleSelectIdList.value = []
-      return ElMessage.error('Member already assumed this role')
-    }
-  }
-  villaRoleForm.roleId = roleId
-}
-
-let isMemberRoleUpdate = false
-
-const onRemoveMemberRole = (index) => {
-  submitMemberRoleLoading.value = true
-  submitMemberRoleDisabled.value = true
-  const roleId = villaRoleForm.amenities[index].id
-  removeMemberRole({ roleId: roleId, provinceCode: villaRoleForm.provinceCode })
-    .then(() => {
-      isMemberRoleUpdate = true
-      villaRoleForm.amenities.splice(index, 1)
-      ElMessage.success('Remove villa role success')
-    })
-    .catch((error) => {
-      ElMessage.error('Remove villa role error')
-      console.error('Remove villa role error', error)
-    })
-    .finally(() => {
-      submitMemberRoleLoading.value = false
-      submitMemberRoleDisabled.value = false
-    })
-}
-
-const onAddMemberRole = () => {
-  submitMemberRoleLoading.value = true
-  submitMemberRoleDisabled.value = true
-  addMemberRole({
-    roleId: villaRoleForm.roleId,
-    provinceCode: villaRoleForm.provinceCode,
-  })
-    .then((response) => {
-      isMemberRoleUpdate = true
-      roleSelectIdList.value = []
-      villaRoleForm.amenities.push(response.data)
-      ElMessage.success('Add villa role success')
-    })
-    .catch((error) => {
-      ElMessage.error('Add villa role error')
-      console.error('Add villa role error', error)
-    })
-    .finally(() => {
-      submitMemberRoleLoading.value = false
-      submitMemberRoleDisabled.value = false
-    })
-}
-
-const onCloseDialogUpdateMemberRole = async () => {
-  if (isMemberRoleUpdate) {
-    isMemberRoleUpdate = false
-    await getVillaList()
-    dialogUpdateMemberRoleVisible.value = false
-  } else {
-    dialogUpdateMemberRoleVisible.value = false
-  }
-}
 
 // ------- remove villa -------
 const onRemove = (provinceCode) => {
@@ -649,6 +517,7 @@ const onRemove = (provinceCode) => {
 .filter-container {
   margin-bottom: 20px;
 }
+
 .avatar-uploader .avatar {
   width: 178px;
   height: 178px;

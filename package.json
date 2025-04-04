@@ -31,6 +31,7 @@
     "axios-mock-adapter": "^2.1.0",
     "element-plus": "^2.1.11",
     "nprogress": "^0.2.0",
+    "photo-sphere-viewer": "^4.8.1",
     "vue": "^3.2.33",
     "vue-router": "^4.0.14",
     "vuex": "^4.0.2",
