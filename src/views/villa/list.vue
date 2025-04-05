@@ -5,26 +5,20 @@
       <el-form :inline="true" ref="searchFormRef" :model="searchForm">
         <el-form-item>
           <el-button type="success" icon="refresh" circle @click="getVillaList"></el-button>
-          <el-button type="primary" icon="plus" circle @click="showAddMemberDialog">
+          <el-button type="primary" icon="plus" circle @click="showAddVillaDialog">
           </el-button>
         </el-form-item>
-        <el-form-item label="Name" prop="villa.name">
-          <el-input v-model="searchForm.villa.name" />
+        <el-form-item label="Name" prop="name">
+          <el-input v-model="searchForm.name" />
         </el-form-item>
-        <el-form-item label="Status" prop="villa.status">
-          <el-select v-model="searchForm.villa.status" clearable>
-            <el-option v-for="item in villaStatusMap" :key="item.value" :label="item.label" :value="item.value"
-              :disabled="item.value === searchForm.villa.status" />
-          </el-select>
+        <el-form-item label="Province Code" prop="provinceCode">
+          <el-input v-model="searchForm.provinceCode" />
         </el-form-item>
-        <el-form-item label="Description" prop="villaData.description">
-          <el-input v-model="searchForm.villaData.description" />
+        <el-form-item label="Suggest Tags" prop="suggestTags">
+          <el-input v-model="searchForm.suggestTags" />
         </el-form-item>
-        <el-form-item label="Province Code" prop="villaData.provinceCode">
-          <el-select v-model="searchForm.villaData.provinceCode" clearable>
-            <el-option v-for="item in villaGenderMap" :key="item.value" :label="item.label" :value="item.value"
-              :disabled="item.value === searchForm.villaData.provinceCode" />
-          </el-select>
+        <el-form-item label="Amenities" prop="amenities">
+          <el-input v-model="searchForm.amenities" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="search" circle :loading="onSearchLoading" :disabled="onSearchDisabled"
@@ -39,100 +33,82 @@
     <!-- Header table -->
     <el-table v-loading="villaListLoading" :data="villaList" border highlight-current-row style="width: 100%">
       <el-table-column type="index" :index="getIndex" />
-      <el-table-column label="Image" prop="villaData.images" width="85">
+      <el-table-column label="Image" prop="urlImages" width="85">
         <template #default="scope">
-          <el-avatar :size="50" :src="scope.row.villaData.images[0]"></el-avatar>
+          <el-avatar :size="50" :src="scope.row.urlImages[0]"></el-avatar>
         </template>
       </el-table-column>
-      <el-table-column label="Name" prop="villa.name" width="150" />
-      <el-table-column label="Description" prop="villaData.description" width="150" />
-      <el-table-column label="Province code" prop="villaData.provinceCode" width="100">
+      <el-table-column label="Name" prop="name[0]" width="250" />
+      <el-table-column label="Description" prop="description[0]" width="150" />
+      <el-table-column label="Province code" prop="provinceCode" width="100">
       </el-table-column>
-      <el-table-column label="Status" prop="villa.status" width="100">
+      <el-table-column label="Status" prop="status" width="100">
       </el-table-column>
-      <el-table-column label="Max Room" prop="villa.maxRoom" width="100">
-      </el-table-column>
-      <el-table-column label="Amenities" width="130">
+      <el-table-column label="Amenities">
         <template #default="scope">
-          <template v-for="amenity in scope.row.amenities" :key="amenity.id">
+          <template v-for="amenity in scope.row.amenities" :key="amenity">
             <el-tag size="small" effect="plain" class="mr-1">
-              {{ amenity.name }}
+              {{ amenity }}
             </el-tag>
           </template>
         </template>
       </el-table-column>
-      <el-table-column label="Price Per Night" prop="villaData.pricePerNight" width="150" />
-      <el-table-column label="Price Per Month" prop="villaData.pricePerMonth" width="150" />
-      <el-table-column label="Update / Create" width="180">
-        <template #default="scope">
-          <div>{{ scope.row.villa.logined_at || 'None' }}</div>
-          <div>{{ scope.row.villa.created_at }}</div>
-        </template>
-      </el-table-column>
-      <el-table-column fixed="right" label="Operations">
+      <el-table-column fixed="right" label="Operations" width="150">
         <template #default="scope">
           <template v-if="true">
             <el-space wrap>
               <span>
-                <el-button @click="showUpdateVillaDialog(scope.row.villaData.id)">Update Villa</el-button>
-              </span>
-              <span v-if="scope.row.villa.maxRoom === 0">
-                <el-popconfirm confirm-button-text="Yes" cancel-button-text="No" icon-color="red"
-                  :title="`Are you sure to remove this villa: ${scope.row.villa.name}?`"
-                  @confirm="onRemove(scope.row.villaData.id)">
-                  <template #reference>
-                    <el-button>Remove</el-button>
-                  </template>
-                </el-popconfirm>
+                <el-button @click="showUpdateVillaDialog(scope.row.id)">Update Villa</el-button>
               </span>
             </el-space>
           </template>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination background layout="total, sizes, prev, pager, next, jumper" v-model:currentPage="page.currentPage"
-      v-model:page-size="page.pageSize" :page-sizes="page.pageSizes" :total="page.totalData"
-      @size-change="handleSizeChange" @current-change="handleCurrentChange">
-    </el-pagination>
     <!-- Modal Add/Update villa -->
     <el-dialog v-model="dialogVillaVisible" :title="dialogVillaStatusMap[dialogVillaStatus].title" destroy-on-close>
       <el-form ref="villaFormRef" :model="villaForm" :rules="villaFormRules" status-icon label-position="left"
         label-width="100px">
-        <el-form-item label="Name" prop="villa.name">
-          <el-input type="text" autocomplete="off" prefix-icon="user" v-model="villaForm.villa.name">
+        <el-form-item label="Name" prop="name">
+          <el-input type="text" autocomplete="off" prefix-icon="Management" v-model="villaForm.name">
             <template #append>
               <el-button icon="refresh-right" @click="getFakeVillaName" :loading="getFakeVillaNameLoading"
                 :disabled="getFakeVillaNameDisabled" />
             </template>
           </el-input>
         </el-form-item>
-        <el-form-item label="Description" prop="villaData.description">
+        <el-form-item label="Province Code" prop="provinceCode">
+          <el-input type="text" autocomplete="off" prefix-icon="Management" v-model="villaForm.provinceCode">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="Address" prop="address">
+          <el-input type="text" autocomplete="off" prefix-icon="address" v-model="villaForm.address">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="Suggest Tags" prop="suggestTags">
+          <el-input type="text" autocomplete="off" prefix-icon="address" v-model="villaForm.suggestTags">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="Amenities" prop="amenities">
+          <el-input type="text" autocomplete="off" prefix-icon="address" v-model="villaForm.amenities">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="Geo" prop="geo">
+          <el-input type="text" autocomplete="off" prefix-icon="address" v-model="villaForm.geo">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="Description" prop="description">
           <el-input type="textarea" autocomplete="off" prefix-icon="maxRoom" :rows="2"
-            v-model="villaForm.villaData.description" />
+            v-model="villaForm.description" />
         </el-form-item>
-        <el-form-item label="Status" prop="villa.status">
-          <el-select v-model="villaForm.villa.status">
-            <el-option v-for="item in villaStatusMap" :key="item.value" :label="item.label" :value="item.value"
-              :disabled="item.value === villaForm.villa.status" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Max Room" prop="villa.maxRoom">
-          <el-input-number v-model="villaForm.villa.maxRoom" :min="1" :max="10" @change="() => { }" />
-        </el-form-item>
-        <el-form-item label="Province Code" prop="villaData.provinceCode">
-          <el-select v-model="villaForm.villaData.provinceCode">
-            <el-option v-for="item in villaGenderMap" :key="item.value" :label="item.label" :value="item.value"
-              :disabled="item.value === villaForm.villaData.provinceCode" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Upload Image" prop="villaData.images">
-          <el-upload class="avatar-uploader" action="http://localhost:8080/uploadImage"
-              :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-              <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-              <el-icon v-else class="avatar-uploader-icon">
-                <Plus />
-              </el-icon>
-            </el-upload>
+        <el-form-item label="Upload Image" prop="urlImages">
+          <el-upload class="avatar-uploader" action="http://localhost:8080/uploadImage" :show-file-list="false"
+            :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+            <el-icon v-else class="avatar-uploader-icon">
+              <Plus />
+            </el-icon>
+          </el-upload>
           <!-- <uploadImage /> -->
         </el-form-item>
       </el-form>
@@ -186,15 +162,7 @@ const beforeAvatarUpload = (rawFile) => {
 
 const store = useStore()
 
-const villaStatusMap = ref([])
-const villaLockMap = ref([])
-const villaGenderMap = ref([])
-
 onMounted(async () => {
-  const dataList = await Pair.getValueByKey(['villaStatusMap', 'villaLockMap', 'villaGenderMap'])
-  villaStatusMap.value = dataList[0].value
-  villaLockMap.value = dataList[1].value
-  villaGenderMap.value = dataList[2].value
   await getVillaList()
 })
 
@@ -207,19 +175,10 @@ const onSearchLoading = ref(false)
 const onSearchDisabled = ref(false)
 const searchFormRef = ref(null)
 const searchForm = reactive({
-  villa: {
-    username: null,
-    status: null,
-  },
-  villaData: {
-    description: null,
-    provinceCode: null,
-  },
-  role: {
-    name: null,
-  },
-  currentPage: null,
-  pageSize: null,
+  name: null,
+  provinceCode: null,
+  suggestTags: [],
+  amenities: []
 })
 
 const onSearch = () => {
@@ -244,43 +203,11 @@ const restSearch = async (formEl) => {
 }
 
 const page = reactive({
-  currentPage: 1,
-  pageSize: 10,
-  pageSizes: [10, 20, 50, 100, 200],
-  totalPage: 1,
-  prePage: 1,
-  nextPage: 1,
   totalData: 0,
 })
 
-const handleSizeChange = (pageSize) => {
-  page.pageSize = pageSize
-  page.currentPage = 1
-  getVillaList()
-}
-
-const handleCurrentChange = (currentPage) => {
-  page.currentPage = currentPage
-  getVillaList()
-}
-
 const getIndex = (index) => {
-  return (page.currentPage - 1) * page.pageSize + index + 1
-}
-
-const getRoleList = () => {
-  return new Promise((resolve, reject) => {
-    listAmenity()
-      .then((response) => {
-        amenities.value = response.data.list
-        resolve(response)
-      })
-      .catch((error) => {
-        ElMessage.error('Get amenities list error')
-        console.error('Get amenities list error', error)
-        reject(error)
-      })
-  })
+  return index + 1
 }
 
 const getVillaList = () => {
@@ -288,15 +215,10 @@ const getVillaList = () => {
     villaListLoading.value = true
     onSearchLoading.value = true
     onSearchDisabled.value = true
-    searchForm.currentPage = page.currentPage
-    searchForm.pageSize = page.pageSize
     listVilla(searchForm)
       .then((response) => {
-        villaList.value = response.data.list
-        page.totalData = response.data.total
-        page.currentPage = response.data.currentPage
-        page.pageSize = response.data.pageSize
-        page.totalPage = response.data.totalPage
+        villaList.value = response.data
+        page.totalData = response.totalRow
         resolve(response)
       })
       .catch((error) => {
@@ -331,18 +253,14 @@ const getFakeVillaNameDisabled = ref(false)
 const villaFormRef = ref(null)
 const defaultVillaForm = () => {
   return {
-    villa: {
-      id: null,
-      username: null,
-      password: null,
-      status: null,
-      maxRoom: null,
-    },
-    villaData: {
-      images: null,
-      description: null,
-      provinceCode: null,
-    },
+    id: null,
+    username: null,
+    password: null,
+    status: null,
+    maxRoom: null,
+    images: null,
+    description: null,
+    provinceCode: null,
   }
 }
 const villaForm = reactive(defaultVillaForm())
@@ -353,7 +271,7 @@ const getFakeVillaName = () => {
   getFakeVillaNameDisabled.value = true
   getFakeName()
     .then((response) => {
-      villaForm.villa.name = response.data
+      villaForm.name = response.data
     })
     .catch((error) => {
       ElMessage.error('Get fake name error')
@@ -365,9 +283,8 @@ const getFakeVillaName = () => {
     })
 }
 
-const showAddMemberDialog = async () => {
+const showAddVillaDialog = async () => {
   Object.assign(villaForm, defaultVillaForm())
-  await getRoleList()
   dialogVillaStatus.value = 'add'
   dialogVillaVisible.value = true
 }
@@ -442,12 +359,11 @@ const villaFormRules = reactive({
   },
 })
 
-const showUpdateVillaDialog = (provinceCode) => {
+const showUpdateVillaDialog = (_id) => {
   Object.assign(villaForm, defaultVillaForm())
-  getVillaDetail({ id: provinceCode })
+  getVillaDetail({ id: _id })
     .then((response) => {
-      villaForm.villa = response.data.villa
-      villaForm.villaData = response.data.villaData
+      Object.assign(villaForm, response.data)
       dialogVillaStatus.value = 'update'
       dialogVillaVisible.value = true
     })
@@ -475,29 +391,6 @@ const onUpdateVilla = () => {
       submitMemberDisabled.value = false
     })
 }
-
-const defaultMemberRoleForm = () => {
-  return {
-    provinceCode: null,
-    amenities: [],
-  }
-}
-const villaRoleForm = reactive(defaultMemberRoleForm())
-
-const showUpdateMemberRoleDialog = (provinceCode) => {
-  Object.assign(villaRoleForm, defaultMemberRoleForm())
-  getVillaDetail({ id: provinceCode })
-    .then(async (response) => {
-      villaRoleForm.provinceCode = response.data.villa.id
-      villaRoleForm.amenities = response.data.amenities
-      await getRoleList()
-    })
-    .catch((error) => {
-      ElMessage.error('Get villa detail error')
-      console.error('Get villa detail error', error)
-    })
-}
-
 
 // ------- remove villa -------
 const onRemove = (provinceCode) => {

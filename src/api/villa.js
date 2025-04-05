@@ -1,6 +1,6 @@
 import request from 'utils/request'
 
-const group = '/villa'
+const group = '/component'
 
 export function detail(data) {
   return request({
@@ -12,7 +12,7 @@ export function detail(data) {
 
 export function listVilla(data) {
   return request({
-    url: `${group}/listVilla`,
+    url: `${group}/villa`,
     method: 'POST',
     data: data
   })

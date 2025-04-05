@@ -15,20 +15,20 @@ if (process.env.NODE_ENV == 'development') {
     mock = new MockAdapter(axios);
     // Thiết lập mock response cho một API
     
-    mock.onPost('/api/login').reply(200, auth.login);
-    mock.onGet('/api/profile').reply(200, auth.profile);
-    mock.onPost('/api/validateAccessToken').reply(200, auth.validateAccessToken);
-    mock.onPost('/api/pair/getValue').reply(200, pair.getValue);
+    mock.onPost('/login').reply(200, auth.login);
+    mock.onGet('/profile').reply(200, auth.profile);
+    mock.onPost('/validateAccessToken').reply(200, auth.validateAccessToken);
+    mock.onPost('/pair/getValue').reply(200, pair.getValue);
     // room
-    mock.onPost('/api/component/listRoom').reply(200, component.listRoom);
-    mock.onPost('/api/component/listAmenity').reply(200, component.listAmenity);
+    mock.onPost('/component/listRoom').reply(200, component.listRoom);
+    mock.onPost('/component/listAmenity').reply(200, component.listAmenity);
     // villa
-    mock.onPost('/api/villa/listVilla').reply(200, villa.listVilla);
-    mock.onPost('/api/villa/listAmenity').reply(200, villa.listAmenity);
-    mock.onPost('/api/villa/detail').reply(200, villa.detail);
+    mock.onPost('/component/villa').reply(200, villa.listVilla);
+    mock.onPost('/component/listAmenity').reply(200, villa.listAmenity);
+    mock.onPost('/component/detail').reply(200, villa.detail);
     //
-    mock.onPost('/api/member/list').reply(200, member.list);
-    mock.onPost('/api/role/list').reply(200, member.list);
+    mock.onPost('/member/list').reply(200, member.list);
+    mock.onPost('/role/list').reply(200, member.list);
 
     // Bạn có thể thêm nhiều mock khác ở đây
 

@@ -20,6 +20,7 @@
   "contributors": [],
   "scripts": {
     "dev": "vite",
+    "stage": "vite --mode stage",
     "prod": "vite --mode production",
     "test": "vite build --mode development",
     "build": "vite build --mode production",

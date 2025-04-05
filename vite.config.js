@@ -9,7 +9,9 @@ import fs from 'fs'
 import process from 'process'
 
 export default ({ command, mode }) => {
-  let NODE_ENV = process.env.NODE_ENV || 'development';
+  let NODE_ENV = process.env.NODE_ENV;
+  if (!NODE_ENV)
+    NODE_ENV = 'development';
   let envFiles = [
     /** default file */
     `.env`,

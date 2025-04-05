@@ -4,6 +4,8 @@ import router from '@/router'
 import { ElMessage, ElLoading } from 'element-plus'
 
 export const baseUrl = import.meta.env.VITE_API_DOMAIN
+console.log(import.meta.env);
+
 
 // refreshing token flag
 let isRefreshing = false
