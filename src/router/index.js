@@ -40,73 +40,81 @@ export const constRouters = [
     {
         path: '/room',
         component: Layout,
-        name: 'Room',
-        meta: { icon: 'user', dropDown: true, },
-        children: [{
-            path: 'list',
-            name: 'Room Manage',
-            component: _import('room/list'),
-            meta: { icon: 'user', auth: true }
-        },]
+        name: 'Quản lý Phòng',
+        meta: { icon: 'Management', dropDown: true, },
+        children: [
+            {
+                path: 'list',
+                name: 'Danh Sách Phòng',
+                component: _import('room/list'),
+                meta: { icon: 'List', auth: true }
+            },
+        ]
     },
     {
         path: '/villa',
         component: Layout,
-        name: 'Villa',
-        meta: { icon: 'user', dropDown: true, },
-        children: [{
-            path: 'list',
-            name: 'Villa Manage',
-            component: _import('villa/list'),
-            meta: { icon: 'user', auth: true }
-        },]
+        name: 'Quản lý Villa',
+        meta: { icon: 'Management', dropDown: true, },
+        children: [
+            {
+                path: 'list',
+                name: 'Danh Sách Villa',
+                component: _import('villa/list'),
+                meta: { icon: 'List', auth: true }
+            }
+        ]
     },
-    // {
-    //     path: '/nestedMenu',
-    //     component: Layout,
-    //     name: 'Nested Menu',
-    //     meta: { icon: 'menu', dropDown: true, },
-    //     children: [{
-    //         path: '11',
-    //         name: '11',
-    //         component: _import('nestedMenu/11'),
-    //         meta: { icon: 'menu' }
-    //     }, {
-    //         path: '12',
-    //         name: '12',
-    //         // use empty.vue to be a children placeholder
-    //         component: _import('empty'),
-    //         meta: { icon: 'menu', dropDown: true, },
-    //         children: [{
-    //             path: '12-21',
-    //             name: '12-21',
-    //             component: _import('nestedMenu/12-21'),
-    //             meta: { icon: 'menu' }
-    //         }, {
-    //             path: '12-22',
-    //             name: '12-22',
-    //             component: _import('nestedMenu/12-22'),
-    //             meta: { icon: 'menu' }
-    //         }, {
-    //             path: '12-23',
-    //             name: '12-23',
-    //             component: _import('empty'),
-    //             meta: { icon: 'menu', dropDown: true, },
-    //             children: [{
-    //                 path: '12-23-31',
-    //                 name: '12-23-31',
-    //                 component: _import('nestedMenu/12-23-31'),
-    //                 meta: { icon: 'menu' }
-    //             },
-    //             {
-    //                 path: '12-23-32',
-    //                 name: '12-23-32',
-    //                 component: _import('nestedMenu/12-23-32'),
-    //                 meta: { icon: 'menu' }
-    //             }]
-    //         },]
-    //     },],
-    // },
+    {
+        path: '/booking',
+        component: Layout,
+        name: 'Đặt Phòng',
+        meta: { icon: 'Service', dropDown: true, },
+        children: [
+            {
+                path: 'list',
+                name: 'Danh Sách Đơn Đặt Phòng',
+                component: _import('booking/list'),
+                meta: { icon: 'List', auth: true }
+            },
+            {
+                path: 'HistoryBooking',
+                name: 'Lịch Sử Đặt Phòng',
+                component: _import('booking/HistoryBooking'),
+                meta: { icon: 'List', auth: true }
+            },
+            {
+                path: 'ConfirmBooking',
+                name: 'Xác Nhận Đặt Phòng',
+                component: _import('booking/ConfirmBooking'),
+                meta: { icon: 'List', auth: true }
+            },
+        ]
+    },
+    {
+        path: '/customer',
+        component: Layout,
+        name: 'Khách Hàng',
+        meta: { icon: 'user', dropDown: true, },
+        children: [
+            {
+                path: 'list',
+                name: 'Danh Sách Khách Hàng',
+                component: _import('customer/list'),
+                meta: { icon: 'List', auth: true }
+            }, {
+                path: 'InfoContact',
+                name: 'Thông tin Liên Hệ',
+                component: _import('customer/InfoContact'),
+                meta: { icon: 'List', auth: true }
+            }, {
+                path: 'transactionHistory',
+                name: 'Lịch Sử Giao Dịch',
+                component: _import('customer/transactionHistory'),
+                meta: { icon: 'List', auth: true }
+            },
+        ]
+    },
 ]
 
 export const asyncRouters = [
