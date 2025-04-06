@@ -81,13 +81,13 @@ export const constRouters = [
                 path: 'HistoryBooking',
                 name: 'Lịch Sử Đặt Phòng',
                 component: _import('booking/HistoryBooking'),
-                meta: { icon: 'List', auth: true }
+                meta: { icon: 'Calendar', auth: true }
             },
             {
                 path: 'ConfirmBooking',
                 name: 'Xác Nhận Đặt Phòng',
                 component: _import('booking/ConfirmBooking'),
-                meta: { icon: 'List', auth: true }
+                meta: { icon: 'Checked', auth: true }
             },
         ]
     },
@@ -106,12 +106,12 @@ export const constRouters = [
                 path: 'InfoContact',
                 name: 'Thông tin Liên Hệ',
                 component: _import('customer/InfoContact'),
-                meta: { icon: 'List', auth: true }
+                meta: { icon: 'Iphone', auth: true }
             }, {
                 path: 'transactionHistory',
                 name: 'Lịch Sử Giao Dịch',
                 component: _import('customer/transactionHistory'),
-                meta: { icon: 'List', auth: true }
+                meta: { icon: 'Calendar', auth: true }
             },
         ]
     },

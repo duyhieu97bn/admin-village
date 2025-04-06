@@ -13,7 +13,7 @@ export function detail(data) {
 export function listVilla(data) {
   return request({
     url: `${group}/villa`,
-    method: 'POST',
+    method: 'GET',
     data: data
   })
 }

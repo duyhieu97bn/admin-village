@@ -4,8 +4,6 @@ import router from '@/router'
 import { ElMessage, ElLoading } from 'element-plus'
 
 export const baseUrl = import.meta.env.VITE_API_DOMAIN
-console.log(import.meta.env);
-
 
 // refreshing token flag
 let isRefreshing = false
@@ -64,6 +62,12 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     (config) => {
+        console.log(config);
+        
+        if (config.method === 'get' && config.data) {
+            const data = new URLSearchParams(config.data).toString()
+            config.url += `?${data}`
+        }
         loadingInstance = ElLoading.service({ fullscreen: true })
         return setGetConfig(config)
     },

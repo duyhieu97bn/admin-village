@@ -10,7 +10,7 @@ import auth from './zfakedata/auth.json'
 
 
 var mock;
-
+console.log('NODE_ENV', process.env.NODE_ENV);
 if (process.env.NODE_ENV == 'development') {
     mock = new MockAdapter(axios);
     // Thiết lập mock response cho một API
@@ -23,7 +23,7 @@ if (process.env.NODE_ENV == 'development') {
     mock.onPost('/component/listRoom').reply(200, component.listRoom);
     mock.onPost('/component/listAmenity').reply(200, component.listAmenity);
     // villa
-    mock.onPost('/component/villa').reply(200, villa.listVilla);
+    mock.onGet('/component/villa').reply(200, villa.listVilla);
     mock.onPost('/component/listAmenity').reply(200, villa.listAmenity);
     mock.onPost('/component/detail').reply(200, villa.detail);
     //

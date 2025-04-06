@@ -23,7 +23,7 @@
                     "Số 1 Hồ Tây",
                     "1 West Lake"
                 ],
-                "urlImages": [
+                "imageIds": [
                     "https://picsum.photos/200"
                 ],
                 "suggestTags": [
@@ -47,7 +47,7 @@
                     "Villa West Lake2"
                 ],
                 "status": 0,
-                "urlImages": [
+                "imageIds": [
                     "https://picsum.photos/200"
                 ],
                 "geo": [
@@ -80,7 +80,7 @@
                     "Villa West Lake3"
                 ],
                 "status": 0,
-                "urlImages": [
+                "imageIds": [
                     "https://picsum.photos/200"
                 ],
                 "geo": [
@@ -113,7 +113,7 @@
                     "Villa West Lake4"
                 ],
                 "status": 0,
-                "urlImages": [
+                "imageIds": [
                     "https://picsum.photos/200"
                 ],
                 "geo": [
@@ -163,7 +163,7 @@
                     "Beautiful"
                 ],
                 "provinceCode": "ha_noi",
-                "urlImages": [
+                "imageIds": [
                     "https://picsum.photos/200"
                 ]
             }
@@ -194,7 +194,7 @@
                 "Số 1 Hồ Tây",
                 "1 West Lake"
             ],
-            "urlImages": [
+            "imageIds": [
                 "https://picsum.photos/200"
             ],
             "suggestTags": [

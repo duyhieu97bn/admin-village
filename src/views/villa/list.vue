@@ -33,18 +33,16 @@
     <!-- Header table -->
     <el-table v-loading="villaListLoading" :data="villaList" border highlight-current-row style="width: 100%">
       <el-table-column type="index" :index="getIndex" />
-      <el-table-column label="Image" prop="urlImages" width="85">
+      <el-table-column label="Image" prop="imageIds" width="85">
         <template #default="scope">
-          <el-avatar :size="50" :src="scope.row.urlImages[0]"></el-avatar>
+          <el-avatar :size="50" :src="getImage(scope.row.imageIds[0])"></el-avatar>
         </template>
       </el-table-column>
       <el-table-column label="Name" prop="name[0]" width="250" />
-      <el-table-column label="Description" prop="description[0]" width="150" />
-      <el-table-column label="Province code" prop="provinceCode" width="100">
+      <el-table-column label="Description" prop="description[0]" />
+      <el-table-column label="Province code" prop="provinceCode" width="150">
       </el-table-column>
-      <el-table-column label="Status" prop="status" width="100">
-      </el-table-column>
-      <el-table-column label="Amenities">
+      <el-table-column label="Amenities" width="350">
         <template #default="scope">
           <template v-for="amenity in scope.row.amenities" :key="amenity">
             <el-tag size="small" effect="plain" class="mr-1">
@@ -101,7 +99,7 @@
           <el-input type="textarea" autocomplete="off" prefix-icon="maxRoom" :rows="2"
             v-model="villaForm.description" />
         </el-form-item>
-        <el-form-item label="Upload Image" prop="urlImages">
+        <el-form-item label="Upload Image" prop="imageIds">
           <el-upload class="avatar-uploader" action="http://localhost:8080/uploadImage" :show-file-list="false"
             :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
@@ -175,8 +173,8 @@ const onSearchLoading = ref(false)
 const onSearchDisabled = ref(false)
 const searchFormRef = ref(null)
 const searchForm = reactive({
-  name: null,
-  provinceCode: null,
+  name: "",
+  provinceCode: "",
   suggestTags: [],
   amenities: []
 })
@@ -215,7 +213,13 @@ const getVillaList = () => {
     villaListLoading.value = true
     onSearchLoading.value = true
     onSearchDisabled.value = true
-    listVilla(searchForm)
+    const Params = {};
+    for (let el in searchForm) {
+      if ((Array.isArray(searchForm[el]) && searchForm[el].length != 0) || (!Array.isArray(searchForm[el]) && searchForm[el])) {
+        Params[el] = searchForm[el]
+      }
+    }
+    listVilla(Params)
       .then((response) => {
         villaList.value = response.data
         page.totalData = response.totalRow
@@ -233,7 +237,9 @@ const getVillaList = () => {
       })
   })
 }
-
+const getImage = (imageId) => {
+  return `${process.env.VITE_API_DOMAIN}/component/image/${imageId}`
+}
 const dialogVillaStatusMap = {
   add: {
     title: 'Add Villa',
@@ -253,14 +259,11 @@ const getFakeVillaNameDisabled = ref(false)
 const villaFormRef = ref(null)
 const defaultVillaForm = () => {
   return {
-    id: null,
-    username: null,
-    password: null,
-    status: null,
-    maxRoom: null,
-    images: null,
-    description: null,
-    provinceCode: null,
+    name: "",
+    suggestTags: "",
+    amenities: "",
+    description: "",
+    provinceCode: "",
   }
 }
 const villaForm = reactive(defaultVillaForm())
