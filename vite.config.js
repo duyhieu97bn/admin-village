@@ -6,10 +6,13 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { resolve } from 'path'
 import dotenv from 'dotenv'
 import fs from 'fs'
-import process from 'process'
 
 export default ({ command, mode }) => {
-  let NODE_ENV = process.env.NODE_ENV || 'development';
+    console.log('mode', mode);
+    let NODE_ENV = mode || 'development';
+  if (!NODE_ENV) {
+    throw new Error('NODE_ENV is not defined');
+  }
   let envFiles = [
     /** default file */
     `.env`,
@@ -19,8 +22,12 @@ export default ({ command, mode }) => {
   for (const file of envFiles) {
     const envConfig = dotenv.parse(fs.readFileSync(file))
     for (const k in envConfig) {
+      
       process.env[k] = envConfig[k]
     }
+    process.env.test = 'test';
+    console.log(process.env.VITE_API_DOMAIN);
+    
   }
   return defineConfig({
     plugins: [
@@ -67,7 +74,7 @@ export default ({ command, mode }) => {
       }
     },
     define: {
-      'process.env': {}
+      'process.env': process.env || {}
     }
   })
 }

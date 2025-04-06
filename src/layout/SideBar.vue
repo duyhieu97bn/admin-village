@@ -13,6 +13,7 @@ import SideBarItem from './SideBarItem.vue'
 const store = useStore()
 const sidebarOpened = computed(() => store.getters.sidebarOpened)
 const accessedRouters = computed(() => store.getters.accessedRouters)
+
 </script>
 
 <style lang="scss" scoped>

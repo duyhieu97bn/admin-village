@@ -3,20 +3,32 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import pair from './zfakedata/pair.json'
 import member from './zfakedata/member.json'
+import component from './zfakedata/component.json'
+import villa from './zfakedata/villa.json'
+import auth from './zfakedata/auth.json'
 // Tạo một instance mock
 
 
 var mock;
-
+console.log('NODE_ENV', process.env.NODE_ENV);
 if (process.env.NODE_ENV == 'development') {
     mock = new MockAdapter(axios);
     // Thiết lập mock response cho một API
     
-    mock.onPost('/api/member/login').reply(200, member.login);
-    mock.onGet('/api/member/profile').reply(200, member.profile);
-    mock.onPost('/api/member/validateAccessToken').reply(200, member.validateAccessToken);
-    mock.onPost('/api/pair/getValue').reply(200, pair.getValue);
-    mock.onPost('/api/member/list').reply(200, member.list);
+    mock.onPost('/login').reply(200, auth.login);
+    mock.onGet('/profile').reply(200, auth.profile);
+    mock.onPost('/validateAccessToken').reply(200, auth.validateAccessToken);
+    mock.onPost('/pair/getValue').reply(200, pair.getValue);
+    // room
+    mock.onPost('/component/listRoom').reply(200, component.listRoom);
+    mock.onPost('/component/listAmenity').reply(200, component.listAmenity);
+    // villa
+    mock.onGet('/component/villa').reply(200, villa.listVilla);
+    mock.onPost('/component/listAmenity').reply(200, villa.listAmenity);
+    mock.onPost('/component/detail').reply(200, villa.detail);
+    //
+    mock.onPost('/member/list').reply(200, member.list);
+    mock.onPost('/role/list').reply(200, member.list);
 
     // Bạn có thể thêm nhiều mock khác ở đây
 

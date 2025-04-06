@@ -1,5 +1,5 @@
 import { constRouters, asyncRouters } from '@/router'
-import { validateAccessToken } from 'api/member'
+import { validateAccessToken } from 'api/auth'
 import Permission from 'utils/Permission'
 
 const permission = new Permission()
@@ -28,15 +28,9 @@ export default {
   actions: {
     generateRoutes({ commit }) {
       return new Promise((resolve, reject) => {
-        validateAccessToken()
-          .then(() => {
-            const accessedAsyncRouters = filterAsyncRouter(asyncRouters)
-            commit('SET_ROUTERS', accessedAsyncRouters)
-            resolve(accessedAsyncRouters)
-          })
-          .catch(error => {
-            reject(error)
-          })
+          const accessedAsyncRouters = filterAsyncRouter(asyncRouters)
+          commit('SET_ROUTERS', accessedAsyncRouters)
+          resolve(accessedAsyncRouters)
       })
     }
   }

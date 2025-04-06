@@ -1,4 +1,4 @@
-import { refreshAccessToken as refreshAccessTokenApi } from 'api/member'
+import { refreshAccessToken as refreshAccessTokenApi } from 'api/auth'
 
 const defaultState = () => {
   return {
@@ -18,9 +18,12 @@ export default {
       state.refreshToken = refreshToken
     },
     SET_TOKEN: (state, _token) => {
-      const { accessToken, refreshToken } = _token
-      state.accessToken = accessToken
-      state.refreshToken = refreshToken
+      // const { accessToken, refreshToken } = _token
+      // state.accessToken = accessToken
+      // state.refreshToken = refreshToken
+      const { token } = _token
+      state.accessToken = token
+      state.refreshToken = token
     },
     RESET_TOKEN: (state) => {
       Object.assign(state, defaultState())

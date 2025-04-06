@@ -1,20 +1,53 @@
 {
     "getValue": {
-        "errno": 0,
+        "message": "success",
         "data": [
             {
                 "value": [
                     {
-                        "value": "a",
-                        "label": "a"
+                        "color": "danger",
+                        "label": "Lock",
+                        "value": 0
+                    },
+                    {
+                        "color": "success",
+                        "label": "Unlock",
+                        "value": 1
                     }
                 ]
             },
             {
-                "value": []
+                "value": [
+                    {
+                        "color": "danger",
+                        "label": "AbNormal",
+                        "value": 0
+                    },
+                    {
+                        "color": "success",
+                        "label": "Normal",
+                        "value": 1
+                    }
+                ]
             },
             {
-                "value": []
+                "value": [
+                    {
+                        "color": "success",
+                        "label": "Male",
+                        "value": 0
+                    },
+                    {
+                        "color": "danger",
+                        "label": "Female",
+                        "value": 1
+                    },
+                    {
+                        "color": "info",
+                        "label": "None",
+                        "value": 2
+                    }
+                ]
             }
         ]
     }

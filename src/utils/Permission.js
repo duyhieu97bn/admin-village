@@ -16,7 +16,7 @@ export default class Permission {
   }
 
   exist() {
-    return store.getters && store.getters.member && store.getters.member.permissionList && store.getters.member.permissionList.length > 0
+    return store.getters && store.getters.member && store.getters.member.role
   }
 
   check(data) {
@@ -54,7 +54,7 @@ export default class Permission {
   checkList(needList = []) {
     if (this.exist()) {
       const needSet = new Set(needList)
-      const permissionSet = new Set(store.getters.member.permissionList)
+      const permissionSet = new Set(store.getters.member.role)
       const intersect = new Set([...needSet].filter(x => permissionSet.has(x)))
       // console.debug(`joint: ${joint}, needList: ${needList}`)
       // console.debug('intersect', intersect)

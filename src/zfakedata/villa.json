@@ -1,0 +1,210 @@
+{
+    "listVilla": {
+        "message": "success",
+        "data": [
+            {
+                "amenities": [
+                    "Air Conditioner",
+                    "Tivi",
+                    "Wifi",
+                    "BlackUser"
+                ],
+                "name": [
+                    "Biệt thự ven Hồ Tây",
+                    "Villa West Lake"
+                ],
+                "status": 1,
+                "geo": [
+                    10,
+                    10
+                ],
+                "id": 1,
+                "address": [
+                    "Số 1 Hồ Tây",
+                    "1 West Lake"
+                ],
+                "imageIds": [
+                    "https://picsum.photos/200"
+                ],
+                "suggestTags": [
+                    "WORK"
+                ],
+                "description": [
+                    "Đẹp",
+                    "Beautiful"
+                ],
+                "provinceCode": "ha_noi"
+            },
+            {
+                "amenities": [
+                    "Air Conditioner",
+                    "Tivi",
+                    "Wifi",
+                    "BlackUser"
+                ],
+                "name": [
+                    "Biệt thự ven Hồ Tây2",
+                    "Villa West Lake2"
+                ],
+                "status": 0,
+                "imageIds": [
+                    "https://picsum.photos/200"
+                ],
+                "geo": [
+                    10,
+                    10
+                ],
+                "id": 2,
+                "address": [
+                    "Số 1 Hồ Tây",
+                    "1 West Lake"
+                ],
+                "suggestTags": [
+                    "WORK"
+                ],
+                "description": [
+                    "Đẹp",
+                    "Beautiful"
+                ],
+                "provinceCode": "ha_noi"
+            },
+            {
+                "amenities": [
+                    "Air Conditioner",
+                    "Tivi",
+                    "Wifi",
+                    "BlackUser"
+                ],
+                "name": [
+                    "Biệt thự ven Hồ Tây3",
+                    "Villa West Lake3"
+                ],
+                "status": 0,
+                "imageIds": [
+                    "https://picsum.photos/200"
+                ],
+                "geo": [
+                    10,
+                    10
+                ],
+                "id": 3,
+                "address": [
+                    "Số 1 Hồ Tây",
+                    "1 West Lake"
+                ],
+                "suggestTags": [
+                    "WORK"
+                ],
+                "description": [
+                    "Đẹp",
+                    "Beautiful"
+                ],
+                "provinceCode": "ha_noi"
+            },
+            {
+                "amenities": [
+                    "Air Conditioner",
+                    "Tivi",
+                    "Wifi",
+                    "BlackUser"
+                ],
+                "name": [
+                    "Biệt thự ven Hồ Tây4",
+                    "Villa West Lake4"
+                ],
+                "status": 0,
+                "imageIds": [
+                    "https://picsum.photos/200"
+                ],
+                "geo": [
+                    10,
+                    10
+                ],
+                "id": 4,
+                "address": [
+                    "Số 1 Hồ Tây",
+                    "1 West Lake"
+                ],
+                "suggestTags": [
+                    "WORK"
+                ],
+                "description": [
+                    "Đẹp",
+                    "Beautiful"
+                ],
+                "provinceCode": "ha_noi"
+            },
+            {
+                "amenities": [
+                    "Air Conditioner",
+                    "Tivi",
+                    "Wifi",
+                    "BlackUser"
+                ],
+                "name": [
+                    "Biệt thự ven Hồ Tây5",
+                    "Villa West Lake5"
+                ],
+                "status": 1,
+                "geo": [
+                    10,
+                    10
+                ],
+                "id": 5,
+                "address": [
+                    "Số 1 Hồ Tây",
+                    "1 West Lake"
+                ],
+                "suggestTags": [
+                    "WORK"
+                ],
+                "description": [
+                    "Đẹp",
+                    "Beautiful"
+                ],
+                "provinceCode": "ha_noi",
+                "imageIds": [
+                    "https://picsum.photos/200"
+                ]
+            }
+        ],
+        "totalRow": 5
+    },
+    "listAmenity": {
+        "message": "success",
+        "data": {
+            "list": [],
+            "total": 5,
+            "currentPage": 1,
+            "pageSize": 10,
+            "totalPage": 1
+        }
+    },
+    "detail": {
+        "message": "success",
+        "data": {
+            "name": "admin",
+            "status": 1,
+            "geo": [
+                10,
+                10
+            ],
+            "id": 1,
+            "address": [
+                "Số 1 Hồ Tây",
+                "1 West Lake"
+            ],
+            "imageIds": [
+                "https://picsum.photos/200"
+            ],
+            "suggestTags": [
+                "WORK"
+            ],
+            "description": [
+                "Đẹp",
+                "Beautiful"
+            ],
+            "provinceCode": 0
+        }
+    }
+}

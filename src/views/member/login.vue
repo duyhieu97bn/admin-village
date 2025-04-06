@@ -95,14 +95,10 @@ const onLogin = (formEl) => {
       return ElMessage.error('Login form error')
     }
     submitLoading.value = true
-    store.dispatch('memberLogin', form)
+    store.dispatch('authLogin', form)
       .then(() => {
-        // get member profile
-        store.dispatch('memberProfile')
-          .then(() => {
-            router.replace({ path: props.redirect || '/' })
-            ElMessage.success('Login success')
-          })
+          router.replace({ path: props.redirect || '/' })
+          ElMessage.success('Login success')
       })
       .catch(error => {
         ElMessage.error('Login error')

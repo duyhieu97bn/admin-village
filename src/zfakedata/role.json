@@ -1,4 +1,23 @@
 {
+    "name": "role",
+    "description": "Role data for user management.",
+    "fields": {
+        "id": {
+        "type": "integer",
+        "description": "Unique identifier for the role."
+        },
+        "name": {
+        "type": "string",
+        "description": "Name of the role."
+        },
+        "permissions": {
+        "type": "array",
+        "items": {
+            "type": "string"
+        },
+        "description": "List of permissions associated with the role."
+        }
+    },
     "list": {
         "message": "success",
         "data": {

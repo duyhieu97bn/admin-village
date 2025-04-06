@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <!-- filter container -->
     <div class="filter-container" v-permission="'member:list'">
       <el-form :inline="true" ref="searchFormRef" :model="searchForm">
         <el-form-item>
@@ -39,7 +40,7 @@
         </el-form-item>
       </el-form>
     </div>
-
+    <!-- Header table -->
     <el-table v-loading="memberListLoading" :data="memberList" border highlight-current-row style="width: 100%">
       <el-table-column type="index" :index="getIndex" />
       <el-table-column label="Avatar" prop="memberData.avatar" width="85">
@@ -110,12 +111,11 @@
         </template>
       </el-table-column>
     </el-table>
-
+    <!--  -->
     <el-pagination background layout="total, sizes, prev, pager, next, jumper" v-model:currentPage="page.currentPage"
       v-model:page-size="page.pageSize" :page-sizes="page.pageSizes" :total="page.totalData"
       @size-change="handleSizeChange" @current-change="handleCurrentChange">
     </el-pagination>
-
     <el-dialog v-model="dialogMemberVisible" :title="dialogMemberStatusMap[dialogMemberStatus].title" destroy-on-close>
       <el-form ref="memberFormRef" :model="memberForm" :rules="memberFormRules" status-icon label-position="left"
         label-width="100px">
