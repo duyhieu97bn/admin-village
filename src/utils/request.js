@@ -62,8 +62,6 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     (config) => {
-        console.log(config);
-        
         if (config.method === 'get' && config.data) {
             const data = new URLSearchParams(config.data).toString()
             config.url += `?${data}`

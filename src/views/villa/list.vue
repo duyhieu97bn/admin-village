@@ -9,16 +9,16 @@
           </el-button>
         </el-form-item>
         <el-form-item label="Name" prop="name">
-          <el-input v-model="searchForm.name" />
+          <el-input v-model="searchForm.name" @keydown.enter="onSearch" />
         </el-form-item>
         <el-form-item label="Province Code" prop="provinceCode">
-          <el-input v-model="searchForm.provinceCode" />
+          <el-input v-model="searchForm.provinceCode" @keydown.enter="onSearch" />
         </el-form-item>
         <el-form-item label="Suggest Tags" prop="suggestTags">
-          <el-input v-model="searchForm.suggestTags" />
+          <el-input v-model="searchForm.suggestTags" @keydown.enter="onSearch" />
         </el-form-item>
         <el-form-item label="Amenities" prop="amenities">
-          <el-input v-model="searchForm.amenities" />
+          <el-input v-model="searchForm.amenities" @keydown.enter="onSearch" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="search" circle :loading="onSearchLoading" :disabled="onSearchDisabled"
@@ -41,6 +41,15 @@
       <el-table-column label="Name" prop="name[0]" width="250" />
       <el-table-column label="Description" prop="description[0]" />
       <el-table-column label="Province code" prop="provinceCode" width="150">
+      </el-table-column>
+      <el-table-column label="Suggest Tags" width="350">
+        <template #default="scope">
+          <template v-for="(suggestTag, index) in scope.row.suggestTags" :key="index">
+            <el-tag size="small" effect="plain" class="mr-1">
+              {{ suggestTag }}
+            </el-tag>
+          </template>
+        </template>
       </el-table-column>
       <el-table-column label="Amenities" width="350">
         <template #default="scope">

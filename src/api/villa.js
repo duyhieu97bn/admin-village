@@ -36,7 +36,7 @@ export function updateDetail(data) {
 
 export function add(data) {
   return request({
-    url: `${group}/add`,
+    url: `${group}/villa`,
     method: 'POST',
     data: data
   })

@@ -10,7 +10,6 @@ import auth from './zfakedata/auth.json'
 
 
 var mock;
-console.log('NODE_ENV', process.env.NODE_ENV);
 if (process.env.NODE_ENV == 'development') {
     mock = new MockAdapter(axios);
     // Thiết lập mock response cho một API
