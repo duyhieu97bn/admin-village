@@ -2,50 +2,18 @@ import request from 'utils/request'
 
 const group = '/component'
 
-export function detail(data) {
+export function getListAmenity(data) {
   return request({
-    url: `${group}/detail`,
-    method: 'POST',
+    url: `${group}/amenity`,
+    method: 'GET',
     data: data
   })
 }
 
-export function listRoom(data) {
+export function getListRoomType(data) {
   return request({
-    url: `${group}/listRoom`,
-    method: 'POST',
-    data: data
-  })
-}
-
-export function listAmenity(data) {
-  return request({
-    url: `/${group}/listAmenity`,
-    method: 'POST',
-    data: data
-  })
-}
-
-export function updateDetail(data) {
-  return request({
-    url: `${group}/updateDetail`,
-    method: 'PUT',
-    data: data
-  })
-}
-
-export function add(data) {
-  return request({
-    url: `${group}/add`,
-    method: 'POST',
-    data: data
-  })
-}
-
-export function remove(data) {
-  return request({
-    url: `${group}/remove`,
-    method: 'DELETE',
+    url: `${group}/room-type`,
+    method: 'GET',
     data: data
   })
 }

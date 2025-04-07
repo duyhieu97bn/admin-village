@@ -35,7 +35,7 @@
       <el-table-column type="index" :index="getIndex" />
       <el-table-column label="Image" prop="imageIds" width="85">
         <template #default="scope">
-          <el-avatar :size="50" :src="getImage(scope.row.imageIds[0])"></el-avatar>
+          <el-image style="width: 100px; height: 100px" :src="getImage(scope.row.imageIds[0])" fit="contain" />
         </template>
       </el-table-column>
       <el-table-column label="Name" prop="name[0]" width="250" />
@@ -137,8 +137,7 @@ import uploadImage from '../imageUpload/add.vue'
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { resetForm, allEmpty } from 'utils/form'
-import Pair from 'utils/Pair'
-import { listVilla, listAmenity, detail as getVillaDetail, updateDetail as updateMemberDetail, add as addMember, remove as removeMember, } from 'api/villa'
+import { getListVilla, updateDetail as updateMemberDetail, add as addMember, remove as removeMember, } from 'api/villa'
 import { getName as getFakeName } from 'api/fake'
 
 // upload image
@@ -228,7 +227,7 @@ const getVillaList = () => {
         Params[el] = searchForm[el]
       }
     }
-    listVilla(Params)
+    getListVilla(Params)
       .then((response) => {
         villaList.value = response.data
         page.totalData = response.totalRow
@@ -362,13 +361,9 @@ const validateNickname = (rule, value, callback) => {
 }
 
 const villaFormRules = reactive({
-  villa: {
     username: [{ trigger: ['change', 'blur'], validator: validateUsername }],
     password: [{ trigger: ['change', 'blur'], validator: validatePassword }],
-  },
-  villaData: {
     description: [{ trigger: ['change', 'blur'], validator: validateNickname }],
-  },
 })
 
 const showUpdateVillaDialog = (_id) => {

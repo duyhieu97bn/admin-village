@@ -3,8 +3,8 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import pair from './zfakedata/pair.json'
 import member from './zfakedata/member.json'
-import component from './zfakedata/component.json'
 import villa from './zfakedata/villa.json'
+import room from './zfakedata/room.json'
 import auth from './zfakedata/auth.json'
 // Tạo một instance mock
 
@@ -19,8 +19,8 @@ if (process.env.NODE_ENV == 'development') {
     mock.onPost('/validateAccessToken').reply(200, auth.validateAccessToken);
     mock.onPost('/pair/getValue').reply(200, pair.getValue);
     // room
-    mock.onPost('/component/listRoom').reply(200, component.listRoom);
-    mock.onPost('/component/listAmenity').reply(200, component.listAmenity);
+    mock.onPost('/component/listRoom').reply(200, room.listRoom);
+    mock.onPost('/component/listAmenity').reply(200, room.listAmenity);
     // villa
     mock.onGet('/component/villa').reply(200, villa.listVilla);
     mock.onPost('/component/listAmenity').reply(200, villa.listAmenity);

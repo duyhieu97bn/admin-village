@@ -46,7 +46,7 @@ const retryAdapterEnhancer = (adapter, options) => {
 const setGetConfig = (config) => {
     config.baseURL = baseUrl
     const accessToken = store.getters.token && store.getters.token.accessToken ? store.getters.token.accessToken : ''
-    config.headers['Authorization'] = accessToken
+    config.headers['Authorization'] = `Bearer ${accessToken}`
     if (config.method === 'post' && !config.headers['Content-type']) {
         // will send preflight request (OPTIONS), needs back-end response correctly
         config.headers['Content-type'] = 'application/json;charset=UTF-8'

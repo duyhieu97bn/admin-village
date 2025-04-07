@@ -5,82 +5,64 @@
       <el-form :inline="true" ref="searchFormRef" :model="searchForm">
         <el-form-item>
           <el-button type="success" icon="refresh" circle @click="getRoomList"></el-button>
-          <el-button type="primary" icon="plus" circle  @click="showAddMemberDialog">
+          <el-button type="primary" icon="plus" circle @click="showAddRoomDialog">
           </el-button>
         </el-form-item>
-        <el-form-item label="Title" prop="room.title">
-          <el-input v-model="searchForm.room.title" />
+        <el-form-item label="Name" prop="name">
+          <el-input v-model="searchForm.name" @keydown.enter="onSearch" />
         </el-form-item>
-        <el-form-item label="Status" prop="room.status">
-          <el-select v-model="searchForm.room.status" clearable>
-            <el-option v-for="item in roomStatusMap" :key="item.value" :label="item.label" :value="item.value"
-              :disabled="item.value === searchForm.room.status" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Description" prop="roomData.description">
-          <el-input v-model="searchForm.roomData.description" />
-        </el-form-item>
-        <el-form-item label="Villa Id" prop="roomData.villaId">
-          <el-select v-model="searchForm.roomData.villaId" clearable>
-            <el-option v-for="item in roomGenderMap" :key="item.value" :label="item.label" :value="item.value"
-              :disabled="item.value === searchForm.roomData.villaId" />
-          </el-select>
+        <el-form-item label="Amenities" prop="amenities">
+          <el-input v-model="searchForm.amenities" @keydown.enter="onSearch" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="search" circle :loading="onSearchLoading" :disabled="onSearchDisabled"
             @click="onSearch"></el-button>
-          <el-button type="danger" icon="refresh-left" circle :loading="restSearchLoading" :disabled="
-            restSearchDisabled ||
+          <el-button type="danger" icon="refresh-left" circle :loading="restSearchLoading" :disabled="restSearchDisabled ||
             !searched ||
             allEmpty(searchForm, ['currentPage', 'pageSize'])
-          " @click="restSearch(searchFormRef)"></el-button>
+            " @click="restSearch(searchFormRef)"></el-button>
         </el-form-item>
       </el-form>
     </div>
     <!-- Header table -->
     <el-table v-loading="roomListLoading" :data="roomList" border highlight-current-row style="width: 100%">
       <el-table-column type="index" :index="getIndex" />
-      <el-table-column label="Image" prop="roomData.images" width="85">
+      <el-table-column label="Image" prop="imageIds" width="85">
         <template #default="scope">
-          <el-avatar :size="50" :src="scope.row.roomData.images[0]"></el-avatar>
+          <el-image style="width: 100px; height: 100px" :src="getImage(scope.row.imageIds[0])" fit="contain" />
         </template>
       </el-table-column>
-      <el-table-column label="Title" prop="room.title" width="150" />
-      <el-table-column label="Description" prop="roomData.description" width="150" />
-      <el-table-column label="Villa ID" prop="roomData.villaId" width="100">
+      <el-table-column label="Name" prop="name[0]" />
+      <el-table-column label="Villa ID" prop="villaId" width="80">
       </el-table-column>
-      <el-table-column label="Status" prop="room.status" width="100">
+      <el-table-column label="Room Type" prop="roomType" width="150">
+        <template #default="scope">
+          {{ getRoomTypeName(scope.row.roomType) }}
+        </template>
       </el-table-column>
-      <el-table-column label="Max Persons" prop="room.maxPersons" width="100">
+      <el-table-column label="Max Persons" prop="maxPersons" width="150">
       </el-table-column>
       <el-table-column label="Amenities" width="130">
         <template #default="scope">
-          <template v-for="amenity in scope.row.amenities" :key="amenity.id">
+          <template v-for="amenity in scope.row.amenities" :key="amenity">
             <el-tag size="small" effect="plain" class="mr-1">
-              {{ amenity.name }}
+              {{ getAmenityName(amenity) }}
             </el-tag>
           </template>
         </template>
       </el-table-column>
-      <el-table-column label="Price Per Night" prop="roomData.pricePerNight" width="150" />
-      <el-table-column label="Price Per Month" prop="roomData.pricePerMonth" width="150" />
-      <el-table-column label="LoginAt / RegisterAt" width="180">
-        <template #default="scope">
-          <div>{{ scope.row.room.logined_at || 'None' }}</div>
-          <div>{{ scope.row.room.created_at }}</div>
-        </template>
-      </el-table-column>
-      <el-table-column fixed="right" label="Operations" >
+      <el-table-column label="Price Per Night" prop="pricePerNight" width="150" />
+      <el-table-column label="Price Per Month" prop="pricePerMonth" width="150" />
+      <el-table-column fixed="right" label="Operations" width="270">
         <template #default="scope">
           <template v-if="true">
             <el-space wrap>
-              <span >
-                <el-button @click="showUpdateRoomDialog(scope.row.room.room_id)">Update Room</el-button>
+              <span>
+                <el-button @click="showUpdateRoomDialog(scope.row.id)">Update Room</el-button>
               </span>
-              <span v-permission="'room:remove'" v-if="scope.row.room.maxPersons === 0">
+              <span>
                 <el-popconfirm confirm-button-text="Yes" cancel-button-text="No" icon-color="red"
-                  :title="`Are you sure to remove this room: ${scope.row.room.title}?`"
-                  @confirm="onRemove(scope.row.room.room_id)">
+                  :title="`Are you sure to remove this room: ${scope.row.nameShow}?`" @confirm="onRemove(scope.row.id)">
                   <template #reference>
                     <el-button>Remove</el-button>
                   </template>
@@ -99,44 +81,53 @@
     <el-dialog v-model="dialogMemberVisible" :title="dialogMemberStatusMap[dialogMemberStatus].title" destroy-on-close>
       <el-form ref="roomFormRef" :model="roomForm" :rules="roomFormRules" status-icon label-position="left"
         label-width="100px">
-        <el-form-item label="Username" prop="room.title">
-          <el-input type="text" autocomplete="off" prefix-icon="user" v-model="roomForm.room.title" />
-        </el-form-item>
-        <el-form-item label="Password" prop="room.password">
-          <el-input type="text" autocomplete="off" prefix-icon="maxPersons" v-model="roomForm.room.password" />
-        </el-form-item>
-        <el-form-item label="Status" prop="room.status">
-          <el-select v-model="roomForm.room.status">
-            <el-option v-for="item in roomStatusMap" :key="item.value" :label="item.label" :value="item.value"
-              :disabled="item.value === roomForm.room.status" />
+        <el-form-item label="Villa" prop="villaId">
+          <el-select v-model="roomForm.villaId">
+            <el-option v-for="item in listVilla" :key="item.id" :label="item.name[0]" :value="item.id"
+              :disabled="item.id === roomForm.villaId" />
           </el-select>
         </el-form-item>
-        <el-form-item label="Lock" prop="room.maxPersons">
-          <el-select v-model="roomForm.room.maxPersons">
-            <el-option v-for="item in roomLockMap" :key="item.value" :label="item.label" :value="item.value"
-              :disabled="item.value === roomForm.room.maxPersons" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Nickname" prop="roomData.description">
-          <el-input type="text" autocomplete="off" prefix-icon="user" v-model="roomForm.roomData.description">
-            <template #append>
-              <el-button icon="refresh-right" @click="getFakeNickname" :loading="getFakeNicknameLoading"
-                :disabled="getFakeNicknameDisabled" />
-            </template>
+        <el-form-item label="Name" prop="name">
+          <el-input type="text" autocomplete="off" prefix-icon="Management" v-model="roomForm.nameShow">
           </el-input>
         </el-form-item>
-        <el-form-item label="Gender" prop="roomData.villaId">
-          <el-select v-model="roomForm.roomData.villaId">
-            <el-option v-for="item in roomGenderMap" :key="item.value" :label="item.label" :value="item.value"
-              :disabled="item.value === roomForm.roomData.villaId" />
+        <el-form-item label="Room Type" prop="roomType">
+          <el-select v-model="roomForm.roomType">
+            <el-option v-for="item in dropdownRoomType" :key="item.value" :label="item.label" :value="item.value"
+              :disabled="item.value === roomForm.roomType" />
           </el-select>
+        </el-form-item>
+        <el-form-item label="Area" prop="area">
+          <el-input type="text" autocomplete="off" v-model="roomForm.area">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="Max Persons" prop="maxPersons">
+          <el-input-number v-model="roomForm.maxPersons" :min="1" :max="100" />
+        </el-form-item>
+        <el-form-item label="Amenities" prop="amenities">
+          <el-select-v2 v-model="roomForm.amenities" filterable :options="dropdownAmenities" placeholder="Please select"
+            style="width: 240px" multiple />
+        </el-form-item>
+        <el-form-item label="Price Per Night" prop="pricePerNight">
+          <el-input-number v-model="roomForm.pricePerNight" :min="0" :max="100000000" :step="10000">
+            <template #prefix>
+              <span>đ</span>
+            </template>
+          </el-input-number>
+        </el-form-item>
+        <el-form-item label="Price Per Month" prop="pricePerMonth">
+          <el-input-number v-model="roomForm.pricePerMonth" :min="0" :max="100000000" :step="10000">
+            <template #prefix>
+              <span>đ</span>
+            </template>
+          </el-input-number>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogMemberVisible = false">Cancel</el-button>
           <el-button type="danger" @click="resetForm(roomFormRef)">Reset</el-button>
-          <el-button type="primary" :loading="submitMemberLoading" :disabled="submitMemberDisabled"
+          <el-button type="primary" :loading="submitRoomLoading" :disabled="submitRoomDisabled"
             @click="dialogMemberStatusMap[dialogMemberStatus].submitAction(roomFormRef)">Confirm
           </el-button>
         </span>
@@ -149,49 +140,86 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { resetForm, allEmpty } from 'utils/form'
-import Pair from 'utils/Pair'
-import { listRoom, listAmenity, detail as getMemberDetail, updateDetail as updateMemberDetail, add as addMember, remove as removeMember, } from 'api/component'
-import { addMemberRole, removeMemberRole } from 'api/role'
-import { getName as getFakeName } from 'api/fake'
+import { listRoom, updateDetail as updateRoomDetail, add as addRoom, remove as removeMember, } from 'api/room'
+import { getListAmenity, getListRoomType } from 'api/component'
+import { getListVilla } from 'api/villa'
 
 const store = useStore()
 const room = computed(() => store.getters.room.room)
 
-const roomStatusMap = ref([])
-const roomLockMap = ref([])
-const roomGenderMap = ref([])
-
 onMounted(async () => {
-  const dataList = await Pair.getValueByKey(['roomStatusMap', 'roomLockMap', 'roomGenderMap'])
-  roomStatusMap.value = dataList[0].value
-  roomLockMap.value = dataList[1].value
-  roomGenderMap.value = dataList[2].value
-  await getRoomList()
+  getVillaList();
+  getAmenities();
+  getRoomType();
+  await getRoomList();
 })
-
+const getRoomType = () => {
+  return new Promise((resolve, reject) => {
+    getListRoomType()
+      .then((response) => {
+        listRoomType.value = response.data
+        dropdownRoomType.value = response.data.map((item) => {
+          return {
+            value: item.code,
+            label: item.name[0],
+          }
+        })
+        resolve(response)
+      })
+      .catch((error) => {
+        ElMessage.error('Get room type list error')
+        console.error('Get room type list error', error)
+        reject(error)
+      })
+      .finally(() => {
+      })
+  })
+}
+const getRoomTypeName = (roomTypeCode) => {
+  const roomType = listRoomType.value.find((item) => item.code === roomTypeCode)
+  return roomType ? roomType.name[0] : ''
+}
+const dropdownRoomType = ref([])
+const listVilla = ref([])
 const roomListLoading = ref(false)
 const roomList = ref([])
-const amenities = ref([])
-const roleSelectIdList = ref([])
+const listAmenities = ref([])
+const listRoomType = ref([])
+const getAmenities = () => {
+  return new Promise((resolve, reject) => {
+    getListAmenity()
+      .then((response) => {
+        listAmenities.value = response.data
+        dropdownAmenities.value = response.data.map((item) => {
+          return {
+            value: item.code,
+            label: item.name[0],
+          }
+        })
+        resolve(response)
+      })
+      .catch((error) => {
+        ElMessage.error('Get amenities list error')
+        console.error('Get amenities list error', error)
+        reject(error)
+      })
+      .finally(() => {
+      })
+  })
+}
+const getAmenityName = (amenityCode) => {
+  const amenity = listAmenities.value.find((item) => item.code === amenityCode)
+  return amenity ? amenity.name[0] : ''
+}
+const dropdownAmenities = ref([])
 
 const searched = ref(false)
 const onSearchLoading = ref(false)
 const onSearchDisabled = ref(false)
 const searchFormRef = ref(null)
 const searchForm = reactive({
-  room: {
-    username: null,
-    status: null,
-  },
-  roomData: {
-    description: null,
-    villaId: null,
-  },
-  role: {
-    name: null,
-  },
-  currentPage: null,
-  pageSize: null,
+  name: "",
+  amenities: []
 })
 
 const onSearch = () => {
@@ -240,36 +268,21 @@ const getIndex = (index) => {
   return (page.currentPage - 1) * page.pageSize + index + 1
 }
 
-const getRoleList = () => {
-  return new Promise((resolve, reject) => {
-    listAmenity()
-      .then((response) => {
-        amenities.value = response.data.list
-        // roleTree.value = list2Tree(response.data.list)
-        resolve(response)
-      })
-      .catch((error) => {
-        ElMessage.error('Get role list error')
-        console.error('Get role list error', error)
-        reject(error)
-      })
-  })
-}
-
 const getRoomList = () => {
   return new Promise((resolve, reject) => {
     roomListLoading.value = true
     onSearchLoading.value = true
     onSearchDisabled.value = true
-    searchForm.currentPage = page.currentPage
-    searchForm.pageSize = page.pageSize
-    listRoom(searchForm)
+    const Params = {};
+    for (let el in searchForm) {
+      if ((Array.isArray(searchForm[el]) && searchForm[el].length != 0) || (!Array.isArray(searchForm[el]) && searchForm[el])) {
+        Params[el] = searchForm[el]
+      }
+    }
+    listRoom(Params)
       .then((response) => {
-        roomList.value = response.data.list
-        page.totalData = response.data.total
-        page.currentPage = response.data.currentPage
-        page.pageSize = response.data.pageSize
-        page.totalPage = response.data.totalPage
+        roomList.value = response.data
+        page.totalData = response.totalRow
         resolve(response)
       })
       .catch((error) => {
@@ -287,68 +300,88 @@ const getRoomList = () => {
 
 const dialogMemberStatusMap = {
   add: {
-    title: 'Add Member',
-    submitAction: (formEl) => onAddMember(formEl),
+    title: 'Add Room',
+    submitAction: (formEl) => onAddRoom(formEl),
   },
   update: {
-    title: 'Update Member',
-    submitAction: (formEl) => onUpdateMember(formEl),
+    title: 'Update Room',
+    submitAction: (formEl) => onUpdateRoom(formEl),
   },
 }
 const dialogMemberStatus = ref('add')
 const dialogMemberVisible = ref(false)
-const submitMemberLoading = ref(false)
-const submitMemberDisabled = ref(false)
-const getFakeNicknameLoading = ref(false)
-const getFakeNicknameDisabled = ref(false)
+const submitRoomLoading = ref(false)
+const submitRoomDisabled = ref(false)
 const roomFormRef = ref(null)
 const defaultRoomForm = () => {
   return {
-    room: {
-      id: null,
-      username: null,
-      password: null,
-      status: null,
-      maxPersons: null,
-    },
-    roomData: {
-      images: null,
-      description: null,
-      villaId: null,
-    },
+    id: null,
+    villaId: null,
+    name: null,
+    nameShow: null,
+    roomType: null,
+    area: null,
+    maxPersons: null,
+    amenities: [],
+    pricePerNight: null,
+    pricePerMonth: null,
   }
 }
 const roomForm = reactive(defaultRoomForm())
 
 // ------- add room -------
-const getFakeNickname = () => {
-  getFakeNicknameLoading.value = true
-  getFakeNicknameDisabled.value = true
-  getFakeName()
-    .then((response) => {
-      roomForm.roomData.description = response.data
-    })
-    .catch((error) => {
-      ElMessage.error('Get fake description error')
-      console.error('Get fake description error', error)
-    })
-    .finally(() => {
-      getFakeNicknameLoading.value = false
-      getFakeNicknameDisabled.value = false
-    })
-}
+const getVillaList = () => {
+  return new Promise((resolve, reject) => {
+    getListVilla()
+      .then((response) => {
+        listVilla.value = response.data;
 
-const showAddMemberDialog = async () => {
+        resolve(response)
+      })
+      .catch((error) => {
+        ElMessage.error('Get villa list error')
+        console.error('Get villa list error', error)
+        reject(error)
+      })
+      .finally(() => {
+      })
+  })
+}
+const showAddRoomDialog = async () => {
   Object.assign(roomForm, defaultRoomForm())
-  await getRoleList()
   dialogMemberStatus.value = 'add'
   dialogMemberVisible.value = true
+  submitRoomDisabled.value = true
 }
 
-const onAddMember = () => {
-  submitMemberLoading.value = true
-  submitMemberDisabled.value = true
-  addMember(roomForm)
+const showUpdateRoomDialog = async (roomId) => {
+  listRoom({ ids: [roomId] })
+    .then((response) => {
+      let data = response.data[0] || {};
+      roomForm.id = null;
+      for (let key in roomForm) {
+        if (data[key]) {
+          roomForm[key] = data[key]
+        }
+        if (roomForm.name) {
+          roomForm.nameShow = roomForm.name[0]
+        }
+      }
+      dialogMemberStatus.value = 'update'
+      dialogMemberVisible.value = true
+    })
+    .catch((error) => {
+      ElMessage.error('Get room detail error')
+      console.error('Get room detail error', error)
+    })
+}
+
+const onAddRoom = () => {
+  submitRoomLoading.value = true
+  submitRoomDisabled.value = true
+  roomForm.name = [roomForm.nameShow, roomForm.nameShow]
+  delete roomForm.id
+  addRoom(roomForm)
     .then(async () => {
       await getRoomList()
       ElMessage.success('Add room success')
@@ -359,81 +392,72 @@ const onAddMember = () => {
       console.error('Add room error', error)
     })
     .finally(() => {
-      submitMemberLoading.value = false
-      submitMemberDisabled.value = false
+      submitRoomLoading.value = false
+      submitRoomDisabled.value = false
     })
 }
 
+const getImage = (imageId) => {
+  return imageId ? `${process.env.VITE_API_DOMAIN}/component/image/${imageId}` : "https://picsum.photos/200"
+}
 // ------- update room -------
-const validateUsername = (rule, value, callback) => {
+const validateVillaId = (rule, value, callback) => {
   if (!value) {
-    submitMemberDisabled.value = true
-    callback(new Error('Please input username'))
+    submitRoomDisabled.value = true
+    callback(new Error('Please select Villa'))
+  } else {
+    submitRoomDisabled.value = false
+    callback()
+  }
+}
+const validateName = (rule, value, callback) => {
+  if (!value) {
+    submitRoomDisabled.value = true
+    callback(new Error('Please input room name'))
   } else {
     if (value.length < 3) {
-      submitMemberDisabled.value = true
-      callback(new Error('Username length must be over 3'))
+      submitRoomDisabled.value = true
+      callback(new Error('Room name length must be over 3'))
     } else {
-      submitMemberDisabled.value = false
+      submitRoomDisabled.value = false
       callback()
     }
   }
 }
-const validatePassword = (rule, value, callback) => {
-  if (value) {
-    if (value.length < 3) {
-      submitMemberDisabled.value = true
-      callback(new Error('Password length must be over 3'))
-    } else {
-      submitMemberDisabled.value = false
-      callback()
-    }
+const validatePricePerNight = (rule, value, callback) => {
+  if (!value) {
+    submitRoomDisabled.value = true
+    callback(new Error('Please set Price Per Night'))
+  } else {
+    submitRoomDisabled.value = false
+    callback()
   }
 }
-const validateNickname = (rule, value, callback) => {
+const validatePricePerMonth = (rule, value, callback) => {
   if (!value) {
-    submitMemberDisabled.value = true
-    callback(new Error('Please input description'))
+    submitRoomDisabled.value = true
+    callback(new Error('Please set Price Per Month'))
   } else {
-    if (value.length < 3) {
-      submitMemberDisabled.value = true
-      callback(new Error('Nickname length must be over 3'))
-    } else {
-      submitMemberDisabled.value = false
-      callback()
-    }
+    submitRoomDisabled.value = false
+    callback()
   }
 }
 
 const roomFormRules = reactive({
-  room: {
-    username: [{ trigger: ['change', 'blur'], validator: validateUsername }],
-    password: [{ trigger: ['change', 'blur'], validator: validatePassword }],
-  },
-  roomData: {
-    description: [{ trigger: ['change', 'blur'], validator: validateNickname }],
-  },
+  villaId: [{ trigger: ['change', 'blur'], validator: validateVillaId }],
+  nameShow: [{ trigger: ['change', 'blur'], validator: validateName }],
+  pricePerNight: [{ trigger: ['change', 'blur'], validator: validatePricePerNight }],
+  pricePerMonth: [{ trigger: ['change', 'blur'], validator: validatePricePerMonth }],
 })
 
-const showUpdateRoomDialog = (roomId) => {
-  Object.assign(roomForm, defaultRoomForm())
-  getMemberDetail({ id: roomId })
-    .then((response) => {
-      roomForm.room = response.data.room
-      roomForm.roomData = response.data.roomData
-      dialogMemberStatus.value = 'update'
-      dialogMemberVisible.value = true
-    })
-    .catch((error) => {
-      ElMessage.error('Get room detail error')
-      console.error('Get room detail error', error)
-    })
-}
 
-const onUpdateMember = () => {
-  submitMemberLoading.value = true
-  submitMemberDisabled.value = true
-  updateMemberDetail(roomForm)
+const onUpdateRoom = () => {
+  submitRoomLoading.value = true
+  submitRoomDisabled.value = true
+  roomForm.name[0] = roomForm.nameShow
+  console.log('roomForm', roomForm);
+  
+  updateRoomDetail(roomForm)
     .then(async () => {
       await getRoomList()
       ElMessage.success('Update room detail success')
@@ -444,9 +468,12 @@ const onUpdateMember = () => {
       console.error('Update room detail error', error)
     })
     .finally(() => {
-      submitMemberLoading.value = false
-      submitMemberDisabled.value = false
+      submitRoomLoading.value = false
+      submitRoomDisabled.value = false
     })
+  
+  submitRoomLoading.value = false
+  submitRoomDisabled.value = false
 }
 
 // ------- remove room -------
@@ -466,5 +493,11 @@ const onRemove = (roomId) => {
 <style lang="scss" scoped>
 .filter-container {
   margin-bottom: 20px;
+}
+
+::v-deep {
+  .el-input-number {
+    width: 200px;
+  }
 }
 </style>

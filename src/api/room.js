@@ -2,14 +2,13 @@ import request from 'utils/request'
 
 const group = '/component'
 
-export function getListVilla(data) {
+export function listRoom(data) {
   return request({
-    url: `${group}/villa`,
+    url: `${group}/room`,
     method: 'GET',
     data: data
   })
 }
-
 
 export function updateDetail(data) {
   return request({
