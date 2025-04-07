@@ -51,7 +51,7 @@ const store = useStore()
 const route = useRoute()
 const router = useRouter()
 
-const memberData = computed(() => store.getters.member.memberData)
+const memberData = computed(() => store.getters.member)
 
 const toLogin = () => router.push(`/login`)
 

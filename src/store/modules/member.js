@@ -8,27 +8,6 @@ const defaultState = () => {
     address: null,
     email: null,
     role: null,
-    // 
-    member: null,
-    memberData: null,
-    roleList: [
-      "role",
-      "role:list",
-      "member:list",
-      "pair:list",
-      "log:list"
-    ],
-    permissionList: [
-      "role",
-      "role:list",
-      "member:list",
-      "pair:list",
-      "log:list",
-      "member:update",
-      "member:remove",
-      "article:add",
-      "article:remove"
-    ]
   }
 }
 
@@ -37,11 +16,6 @@ export default {
 
   mutations: {
     SET_MEMBER: (state, _member) => {
-      // const { member, memberData, roleList, permissionList } = _member
-      // state.member = member
-      // state.memberData = memberData
-      // state.roleList = roleList
-      // state.permissionList = permissionList
       const { username, fullName, phoneNumber, address, email, role } = _member
       state.username = username
       state.fullName = fullName
