@@ -74,18 +74,19 @@ instance.interceptors.request.use(
     }
 )
 
+const authErrorCallback = async (error) => {
+    await store.dispatch('memberLogout')
+    ElMessage.error(`${error}, please login`)
+    router.push({ path: '/login' })
+    return Promise.reject(response.data)
+}
+
 instance.interceptors.response.use(
     (response) => {
         loadingInstance && loadingInstance.close()
         if (response.data.message === "success") {
             return Promise.resolve(response.data)
         } else {
-            const authErrorCallback = async (error) => {
-                await store.dispatch('memberLogout')
-                ElMessage.error(`${error}, please login`)
-                router.push({ path: '/login' })
-                return Promise.reject(response.data)
-            }
             if (response.data.message === 4001) {
                 console.error('Token error:', response.data.msg)
                 return authErrorCallback(response.msg)
@@ -144,8 +145,11 @@ instance.interceptors.response.use(
     },
     (error) => {
         loadingInstance && loadingInstance.close()
-        // console.error('response error', error.response.data.msg)
-        console.error('response error', error.stack)
+        console.error('response error', error)
+        if (error.response.status === 401 && !error.config.url.includes('logout')) {
+            // 401 error, token expired
+            return authErrorCallback(error.message)
+        } 
         return Promise.reject(error)
     }
 )

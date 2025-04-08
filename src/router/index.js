@@ -31,6 +31,13 @@ export const constRouters = [
         props: route => ({ redirect: route.query.redirect })
     },
     {
+        path: '/member/profile',
+        name: 'Profile',
+        component: _import('member/profile'),
+        meta: { hidden: true },
+        props: route => ({ redirect: route.query.redirect })
+    },
+    {
         path: '/register',
         name: 'Register',
         component: _import('member/register'),

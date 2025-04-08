@@ -2,7 +2,7 @@
   <el-card class="box-card">
     <template #header>
       <div class="card-header">
-        <el-avatar :size="60" :src="member.memberData.avatar"></el-avatar>
+        <el-avatar :size="60" :src="member.avatar"></el-avatar>
       </div>
     </template>
     <el-descriptions :column="3" size="large" border>
@@ -18,38 +18,47 @@
             </el-icon>Username
           </div>
         </template>
-        {{ member.member.username }}
+        {{ member.username }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            <el-icon>
+              <avatar />
+            </el-icon>Phone Number
+          </div>
+        </template>
+        {{ member.phoneNumber }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            <el-icon>
+              <avatar />
+            </el-icon>Email Address
+          </div>
+        </template>
+        {{ member.email }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            <el-icon>
+              <avatar />
+            </el-icon>Address
+          </div>
+        </template>
+        {{ member.address }}
       </el-descriptions-item>
       <el-descriptions-item>
         <template #label>
           <div class="cell-item">
             <el-icon>
               <user />
-            </el-icon>Nickname
+            </el-icon>Full Name
           </div>
         </template>
-        {{ member.memberData.nickname }}
-      </el-descriptions-item>
-      <el-descriptions-item v-if="memberGenderMap.length > 0">
-        <template #label>
-          <div class="cell-item">
-            <el-icon>
-              <component :is="memberGenderMap[member.memberData.gender].label"></component>
-            </el-icon>Gender
-          </div>
-        </template>
-        {{ memberGenderMap[member.memberData.gender].label }}
-      </el-descriptions-item>
-      <el-descriptions-item v-if="memberStatusMap.length > 0">
-        <template #label>
-          <div class="cell-item">
-            <el-icon>
-              <flag />
-            </el-icon>Status
-          </div>
-        </template>
-        <el-tag size="small" :type="memberStatusMap[member.member.status].color">
-          {{ memberStatusMap[member.member.status].label }}</el-tag>
+        {{ member.fullName }}
       </el-descriptions-item>
       <el-descriptions-item>
         <template #label>
@@ -59,64 +68,41 @@
             </el-icon>RoleName
           </div>
         </template>
-        <template v-for="role in member.roleList" :key="role.id">
-          <el-tag size="small" effect="plain" class="mr-1">
-            {{ role.name }}</el-tag>
-        </template>
-      </el-descriptions-item>
-      <el-descriptions-item v-if="memberLockMap.length > 0">
-        <template #label>
-          <div class="cell-item">
-            <el-icon>
-              <lock />
-            </el-icon>Lock
-          </div>
-        </template>
-        <el-tag size="small" :type="memberLockMap[member.member.lock].color">
-          {{ memberLockMap[member.member.lock].label }}
-        </el-tag>
-      </el-descriptions-item>
-      <el-descriptions-item>
-        <template #label>
-          <div class="cell-item">
-            <el-icon>
-              <clock />
-            </el-icon>RegisterAt
-          </div>
-        </template>
-        {{ member.member.created_at }}
-      </el-descriptions-item>
-      <el-descriptions-item>
-        <template #label>
-          <div class="cell-item">
-            <el-icon>
-              <clock />
-            </el-icon>LoginedAt
-          </div>
-        </template>
-        {{ member.member.logined_at }}
+        {{ member.role }}
       </el-descriptions-item>
     </el-descriptions>
   </el-card>
 
+  <!-- Update Profile -->
   <el-dialog v-model="dialogProfileVisible" title="Update Profile" destroy-on-close>
     <el-form ref="profileFormRef" :model="profileForm" :rules="profileFormRules" status-icon label-position="left"
       label-width="100px">
-      <el-form-item label="Nickname" prop="memberData.nickname" required>
-        <el-input type="text" autocomplete="off" prefix-icon="user" v-model="profileForm.memberData.nickname"
+      <el-form-item label="Full Name" prop="fullName" required>
+        <el-input type="text" autocomplete="off" prefix-icon="user" v-model="profileForm.fullName"
           placeholder="Please input nickname">
-          <template #append>
-            <el-button icon="refresh-right" @click="getFakeNickname" :loading="getFakeNicknameLoading"
-              :disabled="getFakeNicknameDisabled" />
-          </template>
         </el-input>
       </el-form-item>
-      <el-form-item label="Gender" prop="memberData.gender" required>
+      <el-form-item label="Phone Number" prop="phoneNumber" required>
+        <el-input type="text" autocomplete="off" prefix-icon="user" v-model="profileForm.phoneNumber"
+          placeholder="Please input phone number">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="Email" prop="email" required>
+        <el-input type="text" autocomplete="off" prefix-icon="user" v-model="profileForm.email"
+          placeholder="Please input phone number">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="Address" prop="address" required>
+        <el-input type="text" autocomplete="off" prefix-icon="user" v-model="profileForm.address"
+          placeholder="Please input phone number">
+        </el-input>
+      </el-form-item>
+      <!-- <el-form-item label="Gender" prop="memberData.gender" required>
         <el-select v-model="profileForm.memberData.gender">
           <el-option v-for="item in memberGenderMap" :key="item.value" :label="item.label" :value="item.value"
             :disabled="item.value === profileForm.memberData.gender" />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <template #footer>
       <span class="dialog-footer">
@@ -161,17 +147,9 @@ import { useStore } from 'vuex'
 import { resetForm } from 'utils/form'
 import Pair from 'utils/Pair'
 import { updateProfile, validateOldPassword as validateMemberOldPassword, updatePassword, } from 'api/auth'
-import { getName as getFakeName } from 'api/fake'
 
-const memberStatusMap = ref([])
-const memberLockMap = ref([])
-const memberGenderMap = ref([])
 
 onMounted(async () => {
-  const dataList = await Pair.getValueByKey(['memberStatusMap', 'memberLockMap', 'memberGenderMap'])
-  memberStatusMap.value = dataList[0].value
-  memberLockMap.value = dataList[1].value
-  memberGenderMap.value = dataList[2].value
 })
 
 const store = useStore()
@@ -181,33 +159,14 @@ const member = computed(() => store.getters.member)
 // ------- profile -------
 const submitProfileLoading = ref(false)
 const submitProfileDisabled = ref(false)
-const getFakeNicknameLoading = ref(false)
-const getFakeNicknameDisabled = ref(false)
 const dialogProfileVisible = ref(false)
 const profileFormRef = ref(null)
 const profileForm = reactive({
-  memberData: {
-    nickname: member.value.memberData.nickname,
-    gender: member.value.memberData.gender,
-  }
+  fullName: member.value.fullName,
+  phoneNumber: member.value.phoneNumber,
+  email: member.value.email,
+  address: member.value.address,
 })
-
-const getFakeNickname = () => {
-  getFakeNicknameLoading.value = true
-  getFakeNicknameDisabled.value = true
-  getFakeName()
-    .then((response) => {
-      profileForm.memberData.nickname = response.data
-    })
-    .catch((error) => {
-      ElMessage.error('Get fake nickname error')
-      console.error('Get fake nickname error', error)
-    })
-    .finally(() => {
-      getFakeNicknameLoading.value = false
-      getFakeNicknameDisabled.value = false
-    })
-}
 
 const validateNickname = (rule, value, callback) => {
   if (!value) {
@@ -230,29 +189,29 @@ const profileFormRules = reactive({
   }
 })
 
-const onUpdateProfile = (formEl) => {
-  if (!formEl) return
-  formEl.validate((valid) => {
-    if (!valid) {
-      ElMessage.error('Profile form error')
-    }
-    submitProfileLoading.value = true
-    updateProfile(profileForm)
-      .then(async () => {
-        // get member profile
-        await store.dispatch('memberProfile')
-        ElMessage.success('Update profile success')
-        dialogProfileVisible.value = false
-      })
-      .catch((error) => {
-        ElMessage.error('Update profile error')
-        console.error('Update profile error', error)
-      })
-      .finally(() => {
-        submitProfileLoading.value = false
-      })
-  })
-}
+// const onUpdateProfile = (formEl) => {
+//   if (!formEl) return
+//   formEl.validate((valid) => {
+//     if (!valid) {
+//       ElMessage.error('Profile form error')
+//     }
+//     submitProfileLoading.value = true
+//     updateProfile(profileForm)
+//       .then(async () => {
+//         // get member profile
+//         await store.dispatch('memberProfile')
+//         ElMessage.success('Update profile success')
+//         dialogProfileVisible.value = false
+//       })
+//       .catch((error) => {
+//         ElMessage.error('Update profile error')
+//         console.error('Update profile error', error)
+//       })
+//       .finally(() => {
+//         submitProfileLoading.value = false
+//       })
+//   })
+// }
 
 // ------- password -------
 const submitPasswordLoading = ref(false)
